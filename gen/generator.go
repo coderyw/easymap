@@ -55,10 +55,10 @@ func (g *generator) Run(out io.Writer) error {
 		t := g.typesUnseen[len(g.typesUnseen)-1]
 		g.typesUnseen = g.typesUnseen[:len(g.typesUnseen)-1]
 		if err = g.decode(t); err != nil {
-			return err
+			continue
 		}
 		if err = g.encode(t); err != nil {
-			return err
+			continue
 		}
 	}
 	//fmt.Println(g.out.String())
