@@ -50,6 +50,9 @@ func (g *generator) Add(obj interface{}) {
 
 func (g *generator) Run(out io.Writer) error {
 	g.out = new(bytes.Buffer)
+	if g.pkgName == "" {
+		return nil
+	}
 	var err error
 	for len(g.typesUnseen) > 0 {
 		t := g.typesUnseen[len(g.typesUnseen)-1]

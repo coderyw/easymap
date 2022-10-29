@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	_ "github.com/coderyw/easymap/gen"
 	// Reference the gen package to be friendly to vendoring tools,
 	// as it is an indirect dependency.
 	// (The temporary bootstrapping code uses it.)
