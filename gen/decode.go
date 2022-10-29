@@ -11,6 +11,8 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"unicode"
+	"unicode/utf8"
 )
 
 func (g *generator) decode(t reflect.Type) error {
@@ -34,26 +36,46 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		field reflect.StructField
 		js    string
 		err   error
+		got   bool = false
 	)
 
 	for i := 0; i < r.NumField(); i++ {
 		field = r.Field(i)
+		if !isExportedOrBuiltinType(field.Type) {
+			continue
+		}
 		js = field.Tag.Get("json")
 		if js != "" {
 			fmt.Fprintln(stBuf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
 			if err = g.decodeField(stBuf, field); err != nil {
 				break
 			}
+			got = true
 			fmt.Fprintln(stBuf, "\t}")
 		}
 	}
-	if err == nil {
+	if err == nil && got {
 		fmt.Fprintln(g.out, stBuf.String())
 	}
 
 	fmt.Fprintln(g.out, "\treturn nil")
 	fmt.Fprintln(g.out, "}")
 	return err
+}
+
+// Is this type exported or a builtin?
+func isExportedOrBuiltinType(t reflect.Type) bool {
+	for t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+	// PkgPath will be non-empty even for an exported type,
+	// so we need to check the type name as well.
+	return isExported(t.Name()) || t.PkgPath() == ""
+}
+
+func isExported(name string) bool {
+	rune, _ := utf8.DecodeRuneInString(name)
+	return unicode.IsUpper(rune)
 }
 
 func (g *generator) decodeField(out *bytes.Buffer, r reflect.StructField) error {

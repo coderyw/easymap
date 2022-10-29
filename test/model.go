@@ -1,5 +1,7 @@
 package test
 
+import "sync"
+
 type TestStruct struct {
 	A int     `json:"a"`
 	B string  `json:"b"`
@@ -38,4 +40,8 @@ type Resp360 struct {
 		MatchState string `json:"matchState"`
 	} `json:"data"`
 	Else []interface{} `json:"else"`
+}
+
+type WaitGroupWrapper struct {
+	sync.WaitGroup
 }
