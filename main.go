@@ -5,15 +5,14 @@ import (
 	"flag"
 	"fmt"
 	"github.com/coderyw/easymap/bootstrap"
+	"github.com/coderyw/easymap/parser"
 	"os"
 	"path/filepath"
 	"strings"
-
-	_ "github.com/coderyw/easymap/gen"
 	// Reference the gen package to be friendly to vendoring tools,
 	// as it is an indirect dependency.
 	// (The temporary bootstrapping code uses it.)
-	"github.com/mailru/easyjson/parser"
+	_ "github.com/coderyw/easymap/gen"
 )
 
 var buildTags = flag.String("build_tags", "", "build tags to add to generated file")
