@@ -32,9 +32,7 @@ func (g *generator) encodeStruct(t reflect.Type) error {
 	for i := 0; i < t.NumField(); i++ {
 		field = t.Field(i)
 		fv = field.Type
-		if fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid {
-			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v", g.getTag(field), field.Name))
-		}
+		g.encodeField(fv, field, false)
 	}
 	fmt.Fprintln(g.out, fmt.Sprintf("\treturn m, nil"))
 	fmt.Fprintln(g.out, fmt.Sprintf("}"))
@@ -47,4 +45,20 @@ func (g *generator) getTag(s reflect.StructField) string {
 		tag = s.Name
 	}
 	return tag
+}
+
+func (g *generator) encodeField(fv reflect.Type, field reflect.StructField, isPtr bool) {
+	if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
+		if isPtr {
+			fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))
+			fmt.Fprintln(g.out, fmt.Sprintf("\t\tm[\"%v\"] = *v.%v", g.getTag(field), field.Name))
+			fmt.Fprintln(g.out, fmt.Sprintf("\t}"))
+		} else {
+			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v", g.getTag(field), field.Name))
+		}
+
+	} else if fv.Kind() == reflect.Ptr {
+		fv = fv.Elem()
+		g.encodeField(fv, field, true)
+	}
 }

@@ -8,16 +8,18 @@
 package gen
 
 import (
+	"github.com/coderyw/easymap/gen/test/model"
 	"os"
 	"testing"
-	"xm-common/easymap/test"
 )
 
 func TestRun(t *testing.T) {
-	g := NewGenerator("tf_easymap.go")
-	g.SetPkg("gen", "gen")
-	g.Add(&test.TestStruct{})
-	f, err := os.Create("gen_easymap.go")
+	g := NewGenerator("model_easymap.go")
+	g.SetPkg("model", "github.com/coderyw/easymap/test/model")
+	g.Add(model.EasyMAP_exporter_Resp360(nil))
+	g.Add(model.EasyMAP_exporter_Struct2(nil))
+	g.Add(model.EasyMAP_exporter_TestStruct(nil))
+	f, err := os.Create("test/model/gen_easymap.go")
 	if err != nil {
 		panic(err)
 	}

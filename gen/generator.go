@@ -63,6 +63,9 @@ func (g *generator) Run(out io.Writer) error {
 		if err = g.encode(t); err != nil {
 			continue
 		}
+		if err = g.encodeConst(t); err != nil {
+			continue
+		}
 	}
 	//fmt.Println(g.out.String())
 	g.writeImports(out)
