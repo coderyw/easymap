@@ -23,6 +23,7 @@ func (g *generator) encodeConst(t reflect.Type) error {
 func (g *generator) encodeConstStruct(t reflect.Type) error {
 	fmt.Fprintln(g.out)
 	fmt.Fprintln(g.out)
+	fmt.Fprintln(g.out, fmt.Sprintf("type %vField string", t.Name()))
 	fmt.Fprintln(g.out, fmt.Sprintf("const("))
 	fmt.Fprintln(g.out, fmt.Sprintf(""))
 	for i := 0; i < t.NumField(); i++ {
@@ -36,6 +37,6 @@ func (g *generator) encodeConstField(pt reflect.Type, field reflect.StructField,
 	if fv.Kind() == reflect.Ptr {
 		g.encodeConstField(pt, field, fv.Elem())
 	} else if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
-		fmt.Fprintln(g.out, fmt.Sprintf("\t%v_%v = \"%v\"", pt.Name(), field.Name, g.getTag(field)))
+		fmt.Fprintln(g.out, fmt.Sprintf("\t%v_%v %vField = \"%v\"", pt.Name(), field.Name, pt.Name(), g.getTag(field)))
 	}
 }

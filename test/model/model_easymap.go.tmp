@@ -13,6 +13,7 @@ func (v *WaitGroupWrapper) MarshalMap() (map[string]interface{}, error) {
 }
 
 
+type WaitGroupWrapperField string
 const(
 
 )
@@ -53,17 +54,20 @@ func (v *TestStruct) UnMarshalMap(m map[string]string) error{
 func (v *TestStruct) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
 	m["a"] = v.A
+	m["b"] = v.B
 	m["c"] = v.C
 	m["d"] = v.D
 	return m, nil
 }
 
 
+type TestStructField string
 const(
 
-	TestStruct_A = "a"
-	TestStruct_C = "c"
-	TestStruct_D = "d"
+	TestStruct_A TestStructField = "a"
+	TestStruct_B TestStructField = "b"
+	TestStruct_C TestStructField = "c"
+	TestStruct_D TestStructField = "d"
 )
 func (v *Struct2) UnMarshalMap(m map[string]string) error{
 	var (
@@ -80,12 +84,15 @@ func (v *Struct2) UnMarshalMap(m map[string]string) error{
 
 func (v *Struct2) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
+	m["dd"] = v.DD
 	return m, nil
 }
 
 
+type Struct2Field string
 const(
 
+	Struct2_DD Struct2Field = "dd"
 )
 func (v *Resp360) UnMarshalMap(m map[string]string) error{
 	return nil
