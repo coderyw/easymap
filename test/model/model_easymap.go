@@ -2,8 +2,14 @@ package model
 
 import (
 	strconv "strconv"
+	unsafe "unsafe"
 )
 
+func str2Bytes(s string) []byte {
+	x := (*[2]uintptr)(unsafe.Pointer(&s))
+	h := [3]uintptr{x[0], x[1], x[1]}
+	return *(*[]byte)(unsafe.Pointer(&h))
+}
 func (v *WaitGroupWrapper) UnMarshalMap(m map[string]string) error {
 	return nil
 }
@@ -14,6 +20,10 @@ func (v *WaitGroupWrapper) MarshalMap() (map[string]interface{}, error) {
 }
 
 type WaitGroupWrapperField string
+
+func (v WaitGroupWrapperField) MarshalBinary() (data []byte, err error) {
+	return str2Bytes(string(v)), nil
+}
 
 const ()
 
@@ -61,6 +71,10 @@ func (v *TestStruct) MarshalMap() (map[string]interface{}, error) {
 
 type TestStructField string
 
+func (v TestStructField) MarshalBinary() (data []byte, err error) {
+	return str2Bytes(string(v)), nil
+}
+
 const (
 	TestStruct_A TestStructField = "a"
 	TestStruct_B TestStructField = "b"
@@ -87,6 +101,10 @@ func (v *Struct2) MarshalMap() (map[string]interface{}, error) {
 }
 
 type Struct2Field string
+
+func (v Struct2Field) MarshalBinary() (data []byte, err error) {
+	return str2Bytes(string(v)), nil
+}
 
 const (
 	Struct2_DD Struct2Field = "dd"

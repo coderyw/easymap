@@ -15,6 +15,7 @@ import (
 )
 
 const pkgStrconv = "strconv"
+const pkgUnsafe = "unsafe"
 
 type generator struct {
 	pkgName     string
@@ -30,6 +31,7 @@ func NewGenerator(filename string) *generator {
 		fileName: filename,
 		imports: map[string]string{
 			pkgStrconv: "strconv",
+			pkgUnsafe:  "unsafe",
 		},
 	}
 	return ret
@@ -69,6 +71,7 @@ func (g *generator) Run(out io.Writer) error {
 	}
 	//fmt.Println(g.out.String())
 	g.writeImports(out)
+	g.writeUtil(out)
 	out.Write(g.out.Bytes())
 
 	return nil
@@ -81,4 +84,20 @@ func (g *generator) writeImports(out io.Writer) {
 		out.Write([]byte(fmt.Sprintf("\t%v \"%v\"\n", k, v)))
 	}
 	out.Write([]byte(")\n"))
+}
+
+/**
+func Str2Bytes(s string) []byte {
+	x := (*[2]uintptr)(unsafe.Pointer(&s))
+	h := [3]uintptr{x[0], x[1], x[1]}
+	return *(*[]byte)(unsafe.Pointer(&h))
+}
+*/
+func (g *generator) writeUtil(out io.Writer) {
+	fmt.Fprintln(out)
+	fmt.Fprintln(out, fmt.Sprintf("func str2Bytes(s string) []byte {"))
+	fmt.Fprintln(out, fmt.Sprintf("\tx := (*[2]uintptr)(unsafe.Pointer(&s))"))
+	fmt.Fprintln(out, fmt.Sprintf("\th := [3]uintptr{x[0], x[1], x[1]}"))
+	fmt.Fprintln(out, fmt.Sprintf("\treturn *(*[]byte)(unsafe.Pointer(&h))"))
+	fmt.Fprintln(out, fmt.Sprint("}"))
 }
