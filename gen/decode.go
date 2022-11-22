@@ -44,7 +44,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		if !isExportedOrBuiltinType(field.Type) {
 			continue
 		}
-		js = field.Tag.Get("json")
+		js = field.Tag.Get("em")
 		if js != "" {
 			fmt.Fprintln(stBuf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
 			if err = g.decodeField(stBuf, field, field.Type, false); err != nil {
@@ -203,7 +203,7 @@ func (g *generator) decodeField(out *bytes.Buffer, field reflect.StructField, t 
 		g.decodeField(out, field, t.Elem(), true)
 
 	default:
-		return fmt.Errorf("不支持的field,%v", field.Name)
+		return nil
 	}
 	return nil
 
