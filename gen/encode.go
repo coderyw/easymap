@@ -40,7 +40,7 @@ func (g *generator) encodeStruct(t reflect.Type) error {
 }
 
 func (g *generator) getTag(s reflect.StructField) string {
-	tag := s.Tag.Get("json")
+	tag := s.Tag.Get("em")
 	if tag == "" {
 		tag = s.Name
 	}
