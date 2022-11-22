@@ -40,7 +40,7 @@ func (g *generator) encodeStruct(t reflect.Type) error {
 }
 
 func (g *generator) getTag(s reflect.StructField) string {
-	tag := s.Tag.Get("em")
+	tag := s.Tag.Get(tag)
 	if tag == "" {
 		tag = s.Name
 	}

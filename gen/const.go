@@ -12,6 +12,8 @@ import (
 	"reflect"
 )
 
+const tag = "em"
+
 func (g *generator) encodeConst(t reflect.Type) error {
 	if t.Kind() == reflect.Struct {
 		return g.encodeConstStruct(t)

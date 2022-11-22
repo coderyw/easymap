@@ -44,7 +44,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		if !isExportedOrBuiltinType(field.Type) {
 			continue
 		}
-		js = field.Tag.Get("em")
+		js = field.Tag.Get(tag)
 		if js != "" {
 			fmt.Fprintln(stBuf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
 			if err = g.decodeField(stBuf, field, field.Type, false); err != nil {
