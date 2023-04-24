@@ -10,6 +10,7 @@ package gen
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 func (g *generator) encode(t reflect.Type) error {
@@ -48,6 +49,9 @@ func (g *generator) getTag(s reflect.StructField) string {
 }
 
 func (g *generator) encodeField(fv reflect.Type, field reflect.StructField, isPtr bool) {
+	if strings.HasPrefix(field.Name, "XXX_") {
+		return
+	}
 	if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
 		if isPtr {
 			fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))

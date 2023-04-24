@@ -13,6 +13,7 @@ import (
 )
 
 const tag = "em"
+const jsTag = "json"
 
 func (g *generator) encodeConst(t reflect.Type) error {
 	if t.Kind() == reflect.Struct {

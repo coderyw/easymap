@@ -11,6 +11,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
 	"unicode"
 	"unicode/utf8"
 )
@@ -44,7 +45,13 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		if !isExportedOrBuiltinType(field.Type) {
 			continue
 		}
+		if strings.HasPrefix(field.Name, "XXX_") {
+			continue
+		}
 		js = field.Tag.Get(tag)
+		if js == "" {
+			js = field.Name
+		}
 		if js != "" {
 			fmt.Fprintln(stBuf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
 			if err = g.decodeField(stBuf, field, field.Type, false); err != nil {
