@@ -12,26 +12,28 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"strings"
 )
 
 const pkgStrconv = "strconv"
 const pkgUnsafe = "unsafe"
 
 type generator struct {
-	pkgName     string
-	pkgPath     string
-	fileName    string
-	typesUnseen []reflect.Type
-	out         *bytes.Buffer
-	imports     map[string]string
+	pkgName       string
+	pkgPath       string
+	fileName      string
+	typesUnseen   []reflect.Type
+	out           *bytes.Buffer
+	imports       map[string]string
+	str2BytesName string
 }
 
 func NewGenerator(filename string) *generator {
 	ret := &generator{
 		fileName: filename,
-		imports: map[string]string{
-			pkgStrconv: "strconv",
-			pkgUnsafe:  "unsafe",
+		imports:  map[string]string{
+			//pkgStrconv: "strconv",
+			//pkgUnsafe:  "unsafe",
 		},
 	}
 	return ret
@@ -55,6 +57,7 @@ func (g *generator) Run(out io.Writer) error {
 	if g.pkgName == "" {
 		return nil
 	}
+	g.writeUtil(g.out)
 	var err error
 	for len(g.typesUnseen) > 0 {
 		t := g.typesUnseen[len(g.typesUnseen)-1]
@@ -71,7 +74,6 @@ func (g *generator) Run(out io.Writer) error {
 	}
 	//fmt.Println(g.out.String())
 	g.writeImports(out)
-	g.writeUtil(out)
 	out.Write(g.out.Bytes())
 
 	return nil
@@ -86,16 +88,20 @@ func (g *generator) writeImports(out io.Writer) {
 	out.Write([]byte(")\n"))
 }
 
-/**
-func Str2Bytes(s string) []byte {
-	x := (*[2]uintptr)(unsafe.Pointer(&s))
-	h := [3]uintptr{x[0], x[1], x[1]}
-	return *(*[]byte)(unsafe.Pointer(&h))
-}
+/*
+*
+
+	func Str2Bytes(s string) []byte {
+		x := (*[2]uintptr)(unsafe.Pointer(&s))
+		h := [3]uintptr{x[0], x[1], x[1]}
+		return *(*[]byte)(unsafe.Pointer(&h))
+	}
 */
 func (g *generator) writeUtil(out io.Writer) {
+	g.str2BytesName = "str2Bytes_" + strings.Trim(g.fileName, ".go")
 	fmt.Fprintln(out)
-	fmt.Fprintln(out, fmt.Sprintf("func str2Bytes(s string) []byte {"))
+	g.imports[pkgUnsafe] = "unsafe"
+	fmt.Fprintln(out, fmt.Sprintf("func %s(s string) []byte {", g.str2BytesName))
 	fmt.Fprintln(out, fmt.Sprintf("\tx := (*[2]uintptr)(unsafe.Pointer(&s))"))
 	fmt.Fprintln(out, fmt.Sprintf("\th := [3]uintptr{x[0], x[1], x[1]}"))
 	fmt.Fprintln(out, fmt.Sprintf("\treturn *(*[]byte)(unsafe.Pointer(&h))"))

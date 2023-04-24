@@ -28,7 +28,7 @@ func (g *generator) encodeConstStruct(t reflect.Type) error {
 	fmt.Fprintln(g.out)
 	fmt.Fprintln(g.out, fmt.Sprintf("type %vField string", t.Name()))
 	fmt.Fprintln(g.out, fmt.Sprintf("func (v %vField) MarshalBinary() (data []byte, err error) {", t.Name()))
-	fmt.Fprintln(g.out, fmt.Sprint("return str2Bytes(string(v)), nil"))
+	fmt.Fprintln(g.out, fmt.Sprintf("return %s(string(v)), nil", g.str2BytesName))
 	fmt.Fprintln(g.out, fmt.Sprint("}"))
 
 	fmt.Fprintln(g.out, fmt.Sprintf("const("))

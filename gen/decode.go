@@ -27,19 +27,13 @@ func (g *generator) decode(t reflect.Type) error {
 func (g *generator) decodeStruct(r reflect.Type) error {
 	fmt.Fprintln(g.out, fmt.Sprintf("func (v *%v) UnMarshalMap(m map[string]string) error{", r.Name()))
 
-	stBuf := new(bytes.Buffer)
-	fmt.Fprintln(stBuf, fmt.Sprintf("\tvar ("))
-	fmt.Fprintln(stBuf, fmt.Sprintf("\t\tok bool"))
-	fmt.Fprintln(stBuf, fmt.Sprintf("\t\tval string"))
-	fmt.Fprintln(stBuf, fmt.Sprintf("\t)"))
-
 	var (
 		field reflect.StructField
 		js    string
 		err   error
-		got   bool = false
 	)
 
+	var buf = new(bytes.Buffer)
 	for i := 0; i < r.NumField(); i++ {
 		field = r.Field(i)
 		if !isExportedOrBuiltinType(field.Type) {
@@ -53,16 +47,28 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 			js = field.Name
 		}
 		if js != "" {
-			fmt.Fprintln(stBuf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
-			if err = g.decodeField(stBuf, field, field.Type, false); err != nil {
+			if out, err := g.decodeField(field, field.Type, false); err != nil {
 				break
+			} else {
+				if out == nil {
+					continue
+				}
+				fmt.Fprintln(buf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
+				fmt.Fprint(buf, out)
+				fmt.Fprintln(buf, "\t}")
 			}
-			got = true
-			fmt.Fprintln(stBuf, "\t}")
+
 		}
 	}
-	if err == nil && got {
-		fmt.Fprintln(g.out, stBuf.String())
+
+	if buf.Len() > 0 {
+		stBuf := new(bytes.Buffer)
+		fmt.Fprintln(stBuf, fmt.Sprintf("\tvar ("))
+		fmt.Fprintln(stBuf, fmt.Sprintf("\t\tok bool"))
+		fmt.Fprintln(stBuf, fmt.Sprintf("\t\tval string"))
+		fmt.Fprintln(stBuf, fmt.Sprintf("\t)"))
+		fmt.Fprintln(stBuf, buf)
+		fmt.Fprintln(g.out, stBuf)
 	}
 
 	fmt.Fprintln(g.out, "\treturn nil")
@@ -85,9 +91,11 @@ func isExported(name string) bool {
 	return unicode.IsUpper(rune)
 }
 
-func (g *generator) decodeField(out *bytes.Buffer, field reflect.StructField, t reflect.Type, isPtr bool) error {
+func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr bool) (*bytes.Buffer, error) {
+	out := new(bytes.Buffer)
 	switch t.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseInt(val, 10, 64); err != nil {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
@@ -129,6 +137,7 @@ func (g *generator) decodeField(out *bytes.Buffer, field reflect.StructField, t 
 		}
 		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseUint(val, 10, 64); err != nil {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
@@ -170,6 +179,7 @@ func (g *generator) decodeField(out *bytes.Buffer, field reflect.StructField, t 
 		}
 		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	case reflect.Float32, reflect.Float64:
+		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseFloat(val, 10); err != nil {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
@@ -196,6 +206,7 @@ func (g *generator) decodeField(out *bytes.Buffer, field reflect.StructField, t 
 			fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v = val", field.Name))
 		}
 	case reflect.Bool:
+		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseBool(val); err != nil {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
@@ -207,11 +218,12 @@ func (g *generator) decodeField(out *bytes.Buffer, field reflect.StructField, t 
 		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 
 	case reflect.Ptr:
-		g.decodeField(out, field, t.Elem(), true)
+		return g.decodeField(field, t.Elem(), true)
+	//case reflect.Interface:
 
 	default:
-		return nil
+		return nil, nil
 	}
-	return nil
+	return out, nil
 
 }

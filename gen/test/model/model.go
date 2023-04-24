@@ -13,6 +13,7 @@ type EasyMAP_exporter_TestStruct *TestStruct
 type EasyMAP_exporter_Struct2 *Struct2
 type EasyMAP_exporter_Resp360 *Resp360
 type EasyMAP_exporter_ConfigureAliCdnDomainReq *ConfigureAliCdnDomainReq
+type EasyMAP_exporter_OnlyInterface *OnlyInterface
 
 type Struct2 struct {
 	DD string `json:"dd"`
@@ -63,4 +64,8 @@ type ConfigureAliCdnDomainReq struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
+}
+
+type OnlyInterface struct {
+	A interface{}
 }
