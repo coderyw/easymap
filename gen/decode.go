@@ -98,6 +98,7 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 	if t.Kind() == reflect.Ptr {
 		return g.decodeField(field, t.Elem(), true, pkgPath)
 	}
+	add := ""
 	if tp.String() != tp.Kind().String() {
 		path := tp.PkgPath()
 		arr := strings.Split(tp.String(), ".")
@@ -105,6 +106,7 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 			return nil, fmt.Errorf("错误的名称 %v", arr)
 		}
 		if path != pkgPath { //需要import
+			add = arr[0]
 			g.imports[arr[0]] = tp.PkgPath()
 			turnStr = tp.String()
 		} else {
@@ -202,6 +204,7 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 		return g.decodeField(field, t.Elem(), true, pkgPath)
 
 	default:
+		delete(g.imports, add)
 		return nil, nil
 	}
 	if isPtr {
