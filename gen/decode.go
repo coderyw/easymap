@@ -98,11 +98,6 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 	if t.Kind() == reflect.Ptr {
 		return g.decodeField(field, t.Elem(), true, pkgPath)
 	}
-	fmt.Printf("Type.PkgPath() = %v\n", t.PkgPath())
-	fmt.Printf("Type.Name() = %v\n", t.Name())
-	fmt.Printf("Type.String() = %v\n", t.String())
-
-	fmt.Printf("Type.Kind() = %v\n", t.Kind())
 	if tp.String() != tp.Kind().String() {
 		path := tp.PkgPath()
 		arr := strings.Split(tp.String(), ".")
