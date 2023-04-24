@@ -8,10 +8,10 @@
 package gen
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/coderyw/easymap/gen/test/model"
 	"os"
+	"reflect"
 	"testing"
 )
 
@@ -22,8 +22,8 @@ func TestRun(t *testing.T) {
 	//g.Add(model.EasyMAP_exporter_Struct2(nil))
 	//g.Add(model.EasyMAP_exporter_TestStruct(nil))
 	//g.Add(model.EasyMAP_exporter_ConfigureAliCdnDomainReq(nil))
-	g.Add(model.EasyMAP_exporter_OnlyInterface(nil))
-	f, err := os.Create("test/model/gen_easymap.go")
+	g.Add(model.EasyMAP_exporter_ErrorStruct(nil))
+	f, err := os.Create("test/model/ErrorStruct_easymap.go")
 	if err != nil {
 		panic(err)
 	}
@@ -34,12 +34,15 @@ func TestRun(t *testing.T) {
 }
 
 func TestBuf(t *testing.T) {
-	b1 := new(bytes.Buffer)
-	fmt.Fprintln(b1, "b1zhehsige")
+	ttt := new(model.ErrorStruct)
+	typeValue := reflect.TypeOf(ttt).Elem()
+	fmt.Printf("typeValue.PkgPath = %v\n", typeValue.PkgPath())
+	for i := 0; i < typeValue.NumField(); i++ {
+		fmt.Println(typeValue.Field(i).Name + "-------------")
+		fmt.Printf("Type.PkgPath() = %v\n", typeValue.Field(i).Type.PkgPath())
+		fmt.Printf("Type.Name() = %v\n", typeValue.Field(i).Type.Name())
+		fmt.Printf("Type.String() = %v\n", typeValue.Field(i).Type.String())
 
-	b2 := new(bytes.Buffer)
-	fmt.Fprintln(b2, "hhhh")
-	fmt.Fprintln(b1, b2)
-
-	fmt.Println(b1.String())
+		fmt.Printf("Type.Kind() = %v\n", typeValue.Field(i).Type.Kind())
+	}
 }

@@ -47,7 +47,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 			js = field.Name
 		}
 		if js != "" {
-			if out, err := g.decodeField(field, field.Type, false); err != nil {
+			if out, err := g.decodeField(field, field.Type, false, r.PkgPath()); err != nil {
 				break
 			} else {
 				if out == nil {
@@ -91,8 +91,33 @@ func isExported(name string) bool {
 	return unicode.IsUpper(rune)
 }
 
-func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr bool) (*bytes.Buffer, error) {
+func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr bool, pkgPath string) (*bytes.Buffer, error) {
 	out := new(bytes.Buffer)
+	turnStr := ""
+	var tp reflect.Type = t
+	if t.Kind() == reflect.Ptr {
+		return g.decodeField(field, t.Elem(), true, pkgPath)
+	}
+	fmt.Printf("Type.PkgPath() = %v\n", t.PkgPath())
+	fmt.Printf("Type.Name() = %v\n", t.Name())
+	fmt.Printf("Type.String() = %v\n", t.String())
+
+	fmt.Printf("Type.Kind() = %v\n", t.Kind())
+	if tp.String() != tp.Kind().String() {
+		path := tp.PkgPath()
+		arr := strings.Split(tp.String(), ".")
+		if len(arr) < 2 {
+			return nil, fmt.Errorf("错误的名称 %v", arr)
+		}
+		if path != pkgPath { //需要import
+			g.imports[arr[0]] = tp.PkgPath()
+			turnStr = tp.String()
+		} else {
+			turnStr = arr[1]
+		}
+
+	}
+
 	switch t.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		g.imports[pkgStrconv] = "strconv"
@@ -101,41 +126,27 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
 		switch t.Kind() {
 		case reflect.Int:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := int(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = int(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "int"
 			}
 		case reflect.Int8:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := int8(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = int8(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "int8"
 			}
 		case reflect.Int16:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := int16(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = int16(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "int16"
 			}
 		case reflect.Int32:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := int32(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = int32(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "int32"
 			}
 		case reflect.Int64:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = pv", field.Name))
+			if turnStr == "" {
+				turnStr = "int64"
 			}
 		}
-		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+		//fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseUint(val, 10, 64); err != nil {"))
@@ -143,41 +154,27 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
 		switch t.Kind() {
 		case reflect.Uint:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := uint(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = uint(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "uint"
 			}
 		case reflect.Uint8:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := uint8(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = uint8(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "uint8"
 			}
 		case reflect.Uint16:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := uint16(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = uint16(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "uint16"
 			}
 		case reflect.Uint32:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := uint32(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = uint32(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "uint32"
 			}
 		case reflect.Uint64:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = pv", field.Name))
+			if turnStr == "" {
+				turnStr = "uint64"
 			}
 		}
-		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+		//fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	case reflect.Float32, reflect.Float64:
 		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseFloat(val, 10); err != nil {"))
@@ -185,45 +182,40 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
 		switch t.Kind() {
 		case reflect.Float32:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := float32(pv)"))
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = float32(pv)", field.Name))
+			if turnStr == "" {
+				turnStr = "float32"
 			}
 		case reflect.Float64:
-			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pv", field.Name))
-			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = pv", field.Name))
+			if turnStr == "" {
+				turnStr = "float64"
 			}
 		}
-		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	case reflect.String:
-		if isPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v = &val", field.Name))
-		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v = val", field.Name))
+		if turnStr == "" {
+			turnStr = "string"
 		}
+		fmt.Fprintln(out, fmt.Sprintf("\t\t{pv := val"))
 	case reflect.Bool:
 		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseBool(val); err != nil {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
-		if isPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pv", field.Name))
-		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = pv", field.Name))
+		if turnStr == "" {
+			turnStr = "uint8"
 		}
-		fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
-
 	case reflect.Ptr:
-		return g.decodeField(field, t.Elem(), true)
-	//case reflect.Interface:
+		return g.decodeField(field, t.Elem(), true, pkgPath)
 
 	default:
 		return nil, nil
 	}
+	if isPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %s(pv)", turnStr))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &pvv", field.Name))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %s(pv)", field.Name, turnStr))
+	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	return out, nil
 
 }

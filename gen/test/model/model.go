@@ -1,6 +1,9 @@
 package model
 
-import "sync"
+import (
+	"github.com/coderyw/easymap/gen/test/model/model_path"
+	"sync"
+)
 
 type TestStruct struct {
 	A int     `json:"a"`
@@ -14,6 +17,7 @@ type EasyMAP_exporter_Struct2 *Struct2
 type EasyMAP_exporter_Resp360 *Resp360
 type EasyMAP_exporter_ConfigureAliCdnDomainReq *ConfigureAliCdnDomainReq
 type EasyMAP_exporter_OnlyInterface *OnlyInterface
+type EasyMAP_exporter_ErrorStruct *ErrorStruct
 
 type Struct2 struct {
 	DD string `json:"dd"`
@@ -68,4 +72,18 @@ type ConfigureAliCdnDomainReq struct {
 
 type OnlyInterface struct {
 	A interface{}
+}
+
+type Aewe int64
+
+type ErrorStruct struct {
+	ErrorCode model_path.ErrorCODE
+
+	Str string
+
+	ErrorCodePtr *model_path.ErrorCODE
+
+	A int32
+
+	Adfe Aewe
 }
