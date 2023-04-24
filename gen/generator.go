@@ -98,7 +98,8 @@ func (g *generator) writeImports(out io.Writer) {
 	}
 */
 func (g *generator) writeUtil(out io.Writer) {
-	g.str2BytesName = "str2Bytes_" + strings.Trim(g.fileName, ".go")
+	arr := strings.Split(g.fileName, ".")
+	g.str2BytesName = "str2Bytes_" + arr[0]
 	fmt.Fprintln(out)
 	g.imports[pkgUnsafe] = "unsafe"
 	fmt.Fprintln(out, fmt.Sprintf("func %s(s string) []byte {", g.str2BytesName))

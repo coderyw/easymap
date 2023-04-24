@@ -22,7 +22,7 @@ func TestRun(t *testing.T) {
 	//g.Add(model.EasyMAP_exporter_Struct2(nil))
 	//g.Add(model.EasyMAP_exporter_TestStruct(nil))
 	//g.Add(model.EasyMAP_exporter_ConfigureAliCdnDomainReq(nil))
-	g.Add(model.EasyMAP_exporter_ErrorStruct(nil))
+	g.Add(model.EasyMAP_exporter_StreamCtlServiceServer(nil))
 	f, err := os.Create("test/model/ErrorStruct_easymap.go")
 	if err != nil {
 		panic(err)

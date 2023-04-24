@@ -18,6 +18,7 @@ type EasyMAP_exporter_Resp360 *Resp360
 type EasyMAP_exporter_ConfigureAliCdnDomainReq *ConfigureAliCdnDomainReq
 type EasyMAP_exporter_OnlyInterface *OnlyInterface
 type EasyMAP_exporter_ErrorStruct *ErrorStruct
+type EasyMAP_exporter_StreamCtlServiceServer *StreamCtlServiceServer
 
 type Struct2 struct {
 	DD string `json:"dd"`
@@ -86,4 +87,8 @@ type ErrorStruct struct {
 	A int32
 
 	Adfe Aewe
+}
+
+type StreamCtlServiceServer interface {
+	CreateTencentDomainCname()
 }
