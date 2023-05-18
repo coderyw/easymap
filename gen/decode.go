@@ -198,7 +198,7 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t} else {"))
 		if turnStr == "" {
-			turnStr = "uint8"
+			turnStr = "bool"
 		}
 	case reflect.Ptr:
 		return g.decodeField(field, t.Elem(), true, pkgPath)
