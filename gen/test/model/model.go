@@ -10,6 +10,7 @@ type TestStruct struct {
 	B *string `json:"b"`
 	C float64 `json:"c"`
 	D bool    `json:"d"`
+	E uint8   `json:"e"`
 }
 
 type EasyMAP_exporter_TestStruct *TestStruct

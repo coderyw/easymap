@@ -18,7 +18,10 @@ import (
 
 func (g *generator) decode(t reflect.Type) error {
 	if t.Kind() == reflect.Struct {
-		return g.decodeStruct(t)
+		if err := g.decodeStruct(t); err != nil {
+			return err
+		}
+		return g.decodeInterStruct(t)
 	} else {
 		return fmt.Errorf("暂时只支持struct")
 	}
@@ -76,6 +79,58 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 	return err
 }
 
+func (g *generator) decodeInterStruct(r reflect.Type) error {
+	fmt.Fprintln(g.out, fmt.Sprintf("func (v *%v) UnMarshalMapInterface(m map[string]interface{}) error{", r.Name()))
+
+	var (
+		field reflect.StructField
+		js    string
+		err   error
+	)
+
+	var buf = new(bytes.Buffer)
+	for i := 0; i < r.NumField(); i++ {
+		field = r.Field(i)
+		if !isExportedOrBuiltinType(field.Type) {
+			continue
+		}
+		if strings.HasPrefix(field.Name, "XXX_") {
+			continue
+		}
+		js = field.Tag.Get(tag)
+		if js == "" {
+			js = field.Name
+		}
+		if js != "" {
+			if out, err := g.decodeInterField(field, field.Type, false, r.PkgPath()); err != nil {
+				break
+			} else {
+				if out == nil {
+					continue
+				}
+				fmt.Fprintln(buf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
+				fmt.Fprint(buf, out)
+				fmt.Fprintln(buf, "\t}")
+			}
+
+		}
+	}
+
+	if buf.Len() > 0 {
+		stBuf := new(bytes.Buffer)
+		fmt.Fprintln(stBuf, fmt.Sprintf("\tvar ("))
+		fmt.Fprintln(stBuf, fmt.Sprintf("\t\tok bool"))
+		fmt.Fprintln(stBuf, fmt.Sprintf("\t\tval interface{}"))
+		fmt.Fprintln(stBuf, fmt.Sprintf("\t)"))
+		fmt.Fprintln(stBuf, buf)
+		fmt.Fprintln(g.out, stBuf)
+	}
+
+	fmt.Fprintln(g.out, "\treturn nil")
+	fmt.Fprintln(g.out, "}")
+	return err
+}
+
 // Is this type exported or a builtin?
 func isExportedOrBuiltinType(t reflect.Type) bool {
 	for t.Kind() == reflect.Ptr {
@@ -116,6 +171,7 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 	}
 
 	switch t.Kind() {
+
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		g.imports[pkgStrconv] = "strconv"
 		fmt.Fprintln(out, fmt.Sprintf("\t\tif pv, err := strconv.ParseInt(val, 10, 64); err != nil {"))
@@ -213,6 +269,83 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 	} else {
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %s(pv)", field.Name, turnStr))
 	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+	return out, nil
+
+}
+
+func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, isPtr bool, pkgPath string) (*bytes.Buffer, error) {
+	out := new(bytes.Buffer)
+	turnStr := ""
+	var tp reflect.Type = t
+	if t.Kind() == reflect.Ptr {
+		return g.decodeInterField(field, t.Elem(), true, pkgPath)
+	}
+	add := ""
+	if tp.String() != tp.Kind().String() {
+		path := tp.PkgPath()
+		arr := strings.Split(tp.String(), ".")
+		if len(arr) < 2 {
+			return nil, fmt.Errorf("错误的名称 %v", arr)
+		}
+		if path != pkgPath { //需要import
+			add = arr[0]
+			g.imports[arr[0]] = tp.PkgPath()
+			turnStr = tp.String()
+		} else {
+			turnStr = arr[1]
+		}
+
+	}
+	kindInterArr := []reflect.Kind{
+		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+	}
+	kindFloatArr := []reflect.Kind{
+		reflect.Float32, reflect.Float64,
+	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\tswitch val.(type){"))
+
+	switch t.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		turnStr = t.Kind().String()
+		for _, v := range kindInterArr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v.String()))
+			if isPtr {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v.String()))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
+			} else {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v.String()))
+			}
+		}
+	case reflect.Float32, reflect.Float64:
+		turnStr = t.Kind().String()
+		for _, v := range kindFloatArr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v.String()))
+			if isPtr {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v.String()))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
+			} else {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v.String()))
+			}
+		}
+	case reflect.String, reflect.Bool:
+		turnStr = t.Kind().String()
+		fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", turnStr))
+		if isPtr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, turnStr))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
+		} else {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, turnStr))
+		}
+	case reflect.Ptr:
+		return g.decodeInterField(field, t.Elem(), true, pkgPath)
+
+	default:
+		delete(g.imports, add)
+		return nil, nil
+	}
+
 	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	return out, nil
 
