@@ -43,7 +43,7 @@ func (g *generator) encodeConstStruct(t reflect.Type) error {
 func (g *generator) encodeConstField(pt reflect.Type, field reflect.StructField, fv reflect.Type) {
 	if fv.Kind() == reflect.Ptr {
 		g.encodeConstField(pt, field, fv.Elem())
-	} else if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
+	} else {
 		fmt.Fprintln(g.out, fmt.Sprintf("\t%v_%v %vField = \"%v\"", pt.Name(), field.Name, pt.Name(), g.getTag(field)))
 	}
 }

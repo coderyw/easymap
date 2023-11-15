@@ -47,6 +47,9 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		}
 		js = field.Tag.Get(tag)
 		if js == "" {
+			js = field.Tag.Get(jsTag)
+		}
+		if js == "" {
 			js = field.Name
 		}
 		if js != "" {
@@ -98,6 +101,9 @@ func (g *generator) decodeInterStruct(r reflect.Type) error {
 			continue
 		}
 		js = field.Tag.Get(tag)
+		if js == "" {
+			js = field.Tag.Get(jsTag)
+		}
 		if js == "" {
 			js = field.Name
 		}
@@ -280,6 +286,10 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 	var tp reflect.Type = t
 	if t.Kind() == reflect.Ptr {
 		return g.decodeInterField(field, t.Elem(), true, pkgPath)
+	} else if t.Kind() == reflect.Struct {
+		return g.decodeStructField(field, t, false, pkgPath)
+	} else if t.Kind() == reflect.Array || t.Kind() == reflect.Slice {
+		return g.decodeArrayField(field, t, isPtr, pkgPath)
 	}
 	add := ""
 	if tp.String() != tp.Kind().String() {
@@ -338,8 +348,6 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		} else {
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, turnStr))
 		}
-	case reflect.Ptr:
-		return g.decodeInterField(field, t.Elem(), true, pkgPath)
 
 	default:
 		delete(g.imports, add)
@@ -349,4 +357,86 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 	return out, nil
 
+}
+
+func (g *generator) decodeStructField(field reflect.StructField, t reflect.Type, isPtr bool, pkgPath string) (*bytes.Buffer, error) {
+	out := new(bytes.Buffer)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		isPtr = true
+	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err := v.%v.UnMarshalMapInterface(m1); err != nil {", field.Name))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err := v.%v.UnMarshalMap(m2); err != nil {", field.Name))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+
+	return out, nil
+}
+
+func (g *generator) decodeArrayField(field reflect.StructField, t reflect.Type, isPtr bool, pkgPath string) (*bytes.Buffer, error) {
+	///注意 t必须是数组，且没有elem
+	out := new(bytes.Buffer)
+	var arrFieldIsPtr bool
+	t = t.Elem()
+	if t.Kind() == reflect.Ptr {
+		arrFieldIsPtr = true
+		t = t.Elem()
+	}
+
+	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.([]map[string]interface{}); ok {"))
+	if arrFieldIsPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]*%v, 0)", t.Name()))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]%v, 0)", t.Name()))
+	}
+
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tfor _, v1 := range m1 {"))
+	if arrFieldIsPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tab := new(%v)", t.Name()))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tab := %v{}", t.Name()))
+	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := ab.UnMarshalMapInterface(v1); err != nil {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tvv = append(vv, ab)"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+	if isPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &vv", field.Name))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = vv", field.Name))
+	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\t} else if m1,ok:= val.([]map[string]string); ok {"))
+
+	if arrFieldIsPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]*%v, 0)", t.Name()))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]%v, 0)", t.Name()))
+	}
+
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tfor _, v1 := range m1 {"))
+	if arrFieldIsPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tab := new(%v)", t.Name()))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tab := %v{}", t.Name()))
+	}
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := ab.UnMarshalMap(v1); err != nil {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tvv = append(vv, ab)"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+	if isPtr {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &vv", field.Name))
+	} else {
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = vv", field.Name))
+	}
+
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+
+	return out, nil
 }

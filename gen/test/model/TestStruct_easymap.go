@@ -15,35 +15,35 @@ func (v *TestStruct) UnMarshalMap(m map[string]string) error {
 		ok  bool
 		val string
 	)
-	if val, ok = m["A"]; ok {
+	if val, ok = m["a"]; ok {
 		if pv, err := strconv.ParseInt(val, 10, 64); err != nil {
 			return err
 		} else {
 			v.A = int(pv)
 		}
 	}
-	if val, ok = m["B"]; ok {
+	if val, ok = m["b"]; ok {
 		{
 			pv := val
 			pvv := string(pv)
 			v.B = &pvv
 		}
 	}
-	if val, ok = m["C"]; ok {
+	if val, ok = m["c"]; ok {
 		if pv, err := strconv.ParseFloat(val, 10); err != nil {
 			return err
 		} else {
 			v.C = float64(pv)
 		}
 	}
-	if val, ok = m["D"]; ok {
+	if val, ok = m["d"]; ok {
 		if pv, err := strconv.ParseBool(val); err != nil {
 			return err
 		} else {
 			v.D = bool(pv)
 		}
 	}
-	if val, ok = m["E"]; ok {
+	if val, ok = m["e"]; ok {
 		if pv, err := strconv.ParseUint(val, 10, 64); err != nil {
 			return err
 		} else {
@@ -58,7 +58,7 @@ func (v *TestStruct) UnMarshalMapInterface(m map[string]interface{}) error {
 		ok  bool
 		val interface{}
 	)
-	if val, ok = m["A"]; ok {
+	if val, ok = m["a"]; ok {
 		switch val.(type) {
 		case int:
 			v.A = int(val.(int))
@@ -82,14 +82,14 @@ func (v *TestStruct) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.A = int(val.(uint64))
 		}
 	}
-	if val, ok = m["B"]; ok {
+	if val, ok = m["b"]; ok {
 		switch val.(type) {
 		case string:
 			pvv := string(val.(string))
 			v.B = &pvv
 		}
 	}
-	if val, ok = m["C"]; ok {
+	if val, ok = m["c"]; ok {
 		switch val.(type) {
 		case float32:
 			v.C = float64(val.(float32))
@@ -97,13 +97,13 @@ func (v *TestStruct) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.C = float64(val.(float64))
 		}
 	}
-	if val, ok = m["D"]; ok {
+	if val, ok = m["d"]; ok {
 		switch val.(type) {
 		case bool:
 			v.D = bool(val.(bool))
 		}
 	}
-	if val, ok = m["E"]; ok {
+	if val, ok = m["e"]; ok {
 		switch val.(type) {
 		case int:
 			v.E = uint8(val.(int))
@@ -127,19 +127,87 @@ func (v *TestStruct) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.E = uint8(val.(uint64))
 		}
 	}
+	if val, ok = m["f"]; ok {
+		if m1, ok := val.(map[string]interface{}); ok {
+			if err := v.F.UnMarshalMapInterface(m1); err != nil {
+				return err
+			}
+		} else if m2, ok := val.(map[string]string); ok {
+			if err := v.F.UnMarshalMap(m2); err != nil {
+				return err
+			}
+		}
+	}
+	if val, ok = m["g"]; ok {
+		if m1, ok := val.(map[string]interface{}); ok {
+			if err := v.G.UnMarshalMapInterface(m1); err != nil {
+				return err
+			}
+		} else if m2, ok := val.(map[string]string); ok {
+			if err := v.G.UnMarshalMap(m2); err != nil {
+				return err
+			}
+		}
+	}
+	if val, ok = m["hh"]; ok {
+		if m1, ok := val.([]map[string]interface{}); ok {
+			vv := make([]Fs, 0)
+			for _, v1 := range m1 {
+				ab := Fs{}
+				if err := ab.UnMarshalMapInterface(v1); err != nil {
+					return err
+				}
+				vv = append(vv, ab)
+			}
+			v.HH = vv
+		} else if m1, ok := val.([]map[string]string); ok {
+			vv := make([]Fs, 0)
+			for _, v1 := range m1 {
+				ab := Fs{}
+				if err := ab.UnMarshalMap(v1); err != nil {
+					return err
+				}
+				vv = append(vv, ab)
+			}
+			v.HH = vv
+		}
+	}
+	if val, ok = m["hhs"]; ok {
+		if m1, ok := val.([]map[string]interface{}); ok {
+			vv := make([]*Fs, 0)
+			for _, v1 := range m1 {
+				ab := new(Fs)
+				if err := ab.UnMarshalMapInterface(v1); err != nil {
+					return err
+				}
+				vv = append(vv, ab)
+			}
+			v.HHS = vv
+		} else if m1, ok := val.([]map[string]string); ok {
+			vv := make([]*Fs, 0)
+			for _, v1 := range m1 {
+				ab := new(Fs)
+				if err := ab.UnMarshalMap(v1); err != nil {
+					return err
+				}
+				vv = append(vv, ab)
+			}
+			v.HHS = vv
+		}
+	}
 
 	return nil
 }
 
 func (v *TestStruct) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
-	m["A"] = v.A
+	m["a"] = v.A
 	if v.B != nil {
-		m["B"] = *v.B
+		m["b"] = *v.B
 	}
-	m["C"] = v.C
-	m["D"] = v.D
-	m["E"] = v.E
+	m["c"] = v.C
+	m["d"] = v.D
+	m["e"] = v.E
 	return m, nil
 }
 
@@ -150,9 +218,13 @@ func (v TestStructField) MarshalBinary() (data []byte, err error) {
 }
 
 const (
-	TestStruct_A TestStructField = "A"
-	TestStruct_B TestStructField = "B"
-	TestStruct_C TestStructField = "C"
-	TestStruct_D TestStructField = "D"
-	TestStruct_E TestStructField = "E"
+	TestStruct_A   TestStructField = "a"
+	TestStruct_B   TestStructField = "b"
+	TestStruct_C   TestStructField = "c"
+	TestStruct_D   TestStructField = "d"
+	TestStruct_E   TestStructField = "e"
+	TestStruct_F   TestStructField = "f"
+	TestStruct_G   TestStructField = "g"
+	TestStruct_HH  TestStructField = "hh"
+	TestStruct_HHS TestStructField = "hhs"
 )

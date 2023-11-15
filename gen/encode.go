@@ -43,6 +43,9 @@ func (g *generator) encodeStruct(t reflect.Type) error {
 func (g *generator) getTag(s reflect.StructField) string {
 	tag := s.Tag.Get(tag)
 	if tag == "" {
+		tag = s.Tag.Get(jsTag)
+	}
+	if tag == "" {
 		tag = s.Name
 	}
 	return tag

@@ -6,14 +6,22 @@ import (
 )
 
 type TestStruct struct {
-	A int     `json:"a"`
-	B *string `json:"b"`
-	C float64 `json:"c"`
-	D bool    `json:"d"`
-	E uint8   `json:"e"`
+	A   int     `json:"a"`
+	B   *string `json:"b"`
+	C   float64 `json:"c"`
+	D   bool    `json:"d"`
+	E   uint8   `json:"e"`
+	F   Fs      `json:"f"`
+	G   *Fs     `json:"g"`
+	HH  []Fs    `json:"hh"`
+	HHS []*Fs   `json:"hhs"`
+}
+type Fs struct {
+	DDD string `json:"ddd"`
 }
 
 type EasyMAP_exporter_TestStruct *TestStruct
+type EasyMAP_exporter_Fs *Fs
 type EasyMAP_exporter_Struct2 *Struct2
 type EasyMAP_exporter_Resp360 *Resp360
 type EasyMAP_exporter_ConfigureAliCdnDomainReq *ConfigureAliCdnDomainReq
