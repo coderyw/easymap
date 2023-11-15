@@ -13,7 +13,7 @@ func (v *Fs) UnMarshalMap(m map[string]string) error{
 		ok bool
 		val string
 	)
-	if val,ok=m["DDD"];ok{
+	if val,ok=m["ddd"];ok{
 		{pv := val
 			v.DDD = string(pv)
 		}
@@ -27,7 +27,7 @@ func (v *Fs) UnMarshalMapInterface(m map[string]interface{}) error{
 		ok bool
 		val interface{}
 	)
-	if val,ok=m["DDD"];ok{
+	if val,ok=m["ddd"];ok{
 		switch val.(type){
 		case string:
 			v.DDD = string(val.(string))
@@ -41,7 +41,7 @@ func (v *Fs) UnMarshalMapInterface(m map[string]interface{}) error{
 
 func (v *Fs) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
-	m["DDD"] = v.DDD
+	m["ddd"] = v.DDD
 	return m, nil
 }
 
@@ -52,5 +52,5 @@ return str2Bytes_Fs(string(v)), nil
 }
 const(
 
-	Fs_DDD FsField = "DDD"
+	Fs_DDD FsField = "ddd"
 )

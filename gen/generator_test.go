@@ -37,11 +37,17 @@ func Test_generator_Run(t *testing.T) {
 			obj:       model.EasyMAP_exporter_TestStruct(nil),
 			outFile:   "test/model/TestStruct_easymap.go",
 		}, wantErr: false},
-		{name: "TestStruct", fields: fields{
+		{name: "TestFs", fields: fields{
 			generator: "Fs.go",
 			pkg:       "github.com/coderyw/easymap/test/model",
 			obj:       model.EasyMAP_exporter_Fs(nil),
 			outFile:   "test/model/Fs_easymap.go",
+		}, wantErr: false},
+		{name: "Testfs", fields: fields{
+			generator: "fs.go",
+			pkg:       "github.com/coderyw/easymap/test/model",
+			obj:       model.EasyMAP_exporter_fs(nil),
+			outFile:   "test/model/ffs_easymap.go",
 		}, wantErr: false},
 		{name: "Struct2", fields: fields{
 			generator: "Struct2.go",

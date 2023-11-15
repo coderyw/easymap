@@ -94,9 +94,9 @@ func (g *generator) decodeInterStruct(r reflect.Type) error {
 	var buf = new(bytes.Buffer)
 	for i := 0; i < r.NumField(); i++ {
 		field = r.Field(i)
-		if !isExportedOrBuiltinType(field.Type) {
-			continue
-		}
+		//if !isExportedOrBuiltinType(field.Type) {
+		//	continue
+		//}
 		if strings.HasPrefix(field.Name, "XXX_") {
 			continue
 		}
