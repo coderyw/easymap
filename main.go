@@ -22,6 +22,8 @@ var lowerCamelCase = flag.Bool("lower_camel_case", false, "use lowerCamelCase na
 var noStdMarshalers = flag.Bool("no_std_marshalers", false, "don't generate MarshalJSON/UnmarshalJSON funcs")
 var omitEmpty = flag.Bool("omit_empty", false, "omit empty fields by default")
 var allStructs = flag.Bool("all", false, "generate marshaler/unmarshalers for all structs in a file")
+var excludeFileSuffix = flag.String("exclude_suff", "", "排除文件后缀名")
+var includeFileSuffix = flag.String("include_suff", "", "只需要包含这个后缀的go文件")
 var simpleBytes = flag.Bool("byte", false, "use simple bytes instead of Base64Bytes for slice of bytes")
 var leaveTemps = flag.Bool("leave_temps", false, "do not delete temporary files")
 var stubs = flag.Bool("stubs", false, "only generate stubs for marshaler/unmarshaler funcs")
@@ -37,7 +39,11 @@ func generate(fname string) (err error) {
 		return err
 	}
 
-	p := parser.Parser{AllStructs: *allStructs}
+	p := parser.Parser{
+		AllStructs: *allStructs,
+		ExSuff:     *excludeFileSuffix,
+		WantSuff:   *includeFileSuffix,
+	}
 	if err := p.Parse(fname, fInfo.IsDir()); err != nil {
 		return fmt.Errorf("Error parsing %v: %v", fname, err)
 	}

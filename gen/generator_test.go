@@ -8,6 +8,7 @@
 package gen
 
 import (
+	"fmt"
 	"github.com/coderyw/easymap/gen/test/model"
 	"os"
 	"testing"
@@ -49,6 +50,12 @@ func Test_generator_Run(t *testing.T) {
 			obj:       model.EasyMAP_exporter_fs(nil),
 			outFile:   "test/model/ffs_easymap.go",
 		}, wantErr: false},
+		{name: "Testfs", fields: fields{
+			generator: "OutModel.go",
+			pkg:       "github.com/coderyw/easymap/test/model",
+			obj:       model.EasyMAP_exporter_OutModel(nil),
+			outFile:   "test/model/OutModel_easymap.go",
+		}, wantErr: false},
 		{name: "Struct2", fields: fields{
 			generator: "Struct2.go",
 			pkg:       "github.com/coderyw/easymap/test/model",
@@ -84,4 +91,15 @@ func Test_generator_Run(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestUnMarshalMapInterface(t *testing.T) {
+	a := map[string]interface{}{
+		"unEasyMap": map[string]interface{}{},
+	}
+	n := model.OutModel{}
+	err := n.UnMarshalMapInterface(a)
+	fmt.Println(err)
+	fmt.Println(n)
+
 }

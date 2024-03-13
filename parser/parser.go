@@ -18,6 +18,8 @@ type Parser struct {
 	PkgName     string
 	StructNames []string
 	AllStructs  bool
+	ExSuff      string
+	WantSuff    string
 }
 
 type visitor struct {
@@ -114,7 +116,7 @@ func (p *Parser) Parse(fname string, isDir bool) error {
 
 	fset := token.NewFileSet()
 	if isDir {
-		packages, err := parser.ParseDir(fset, fname, excludeTestFiles, parser.ParseComments)
+		packages, err := parser.ParseDir(fset, fname, p.excludeTestFiles, parser.ParseComments)
 		if err != nil {
 			return err
 		}
@@ -133,6 +135,15 @@ func (p *Parser) Parse(fname string, isDir bool) error {
 	return nil
 }
 
-func excludeTestFiles(fi os.FileInfo) bool {
-	return !strings.HasSuffix(fi.Name(), "_test.go")
+func (p *Parser) excludeTestFiles(fi os.FileInfo) bool {
+	if strings.HasSuffix(fi.Name(), "_test.go") {
+		return false
+	}
+	if p.ExSuff != "" {
+		return !strings.HasSuffix(fi.Name(), p.ExSuff)
+	}
+	if p.WantSuff != "" {
+		return strings.HasSuffix(fi.Name(), p.WantSuff)
+	}
+	return true
 }
