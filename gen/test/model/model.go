@@ -26,7 +26,9 @@ type Fs struct {
 	DDD string `json:"ddd"`
 }
 type OutModel struct {
-	UnEasyMap model1.UnEasyMap `json:"unEasyMap"`
+	UnEasyMap model1.UnEasyMap  `json:"unEasyMap"`
+	PtrMap    *model1.UnEasyMap `json:"ptrMap"`
+	un        *model1.UnEasyMap `json:"un"`
 }
 
 type EasyMAP_exporter_TestStruct *TestStruct

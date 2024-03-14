@@ -142,6 +142,7 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 	for t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
+	fmt.Println(t.PkgPath())
 	// PkgPath will be non-empty even for an exported type,
 	// so we need to check the type name as well.
 	return isExported(t.Name()) || t.PkgPath() == ""
@@ -287,7 +288,7 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 	if t.Kind() == reflect.Ptr {
 		return g.decodeInterField(field, t.Elem(), true, pkgPath)
 	} else if t.Kind() == reflect.Struct {
-		return g.decodeStructField(field, t, false, pkgPath)
+		return g.decodeStructField1(field, t, false, pkgPath)
 	} else if t.Kind() == reflect.Array || t.Kind() == reflect.Slice {
 		return g.decodeArrayField(field, t, isPtr, pkgPath)
 	}
@@ -372,6 +373,31 @@ func (g *generator) decodeStructField(field reflect.StructField, t reflect.Type,
 	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok {"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err := v.%v.UnMarshalMap(m2); err != nil {", field.Name))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+
+	return out, nil
+}
+
+func (g *generator) decodeStructField1(field reflect.StructField, t reflect.Type, isPtr bool, pkgPath string) (*bytes.Buffer, error) {
+	out := new(bytes.Buffer)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		isPtr = true
+	}
+
+	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=v.%v", field.Name))
+	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b,ok :=i.(facade.EasyMapInter); ok  {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMapInterface(m1); err != nil {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b, ok := i.(facade.EasyMapString); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMap(m2); err != nil {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 
