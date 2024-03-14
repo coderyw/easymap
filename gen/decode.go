@@ -386,7 +386,7 @@ func (g *generator) decodeStructField1(field reflect.StructField, t reflect.Type
 		t = t.Elem()
 		isPtr = true
 	}
-	g.imports[pkgFacade] = "github.com/coderyw/easymap/facade"
+	g.imports[pkgFacade] = "github.com/coderyw/easymap/gen/facade"
 
 	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=v.%v", field.Name))
 	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok {"))

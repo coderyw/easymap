@@ -1,7 +1,7 @@
 package model
 
 import (
-	easy_facade "github.com/coderyw/easymap/facade"
+	easy_facade "github.com/coderyw/easymap/gen/facade"
 	strconv "strconv"
 	unsafe "unsafe"
 )

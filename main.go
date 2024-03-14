@@ -47,7 +47,7 @@ func generate(fname string) (err error) {
 	if err := p.Parse(fname, fInfo.IsDir()); err != nil {
 		return fmt.Errorf("Error parsing %v: %v", fname, err)
 	}
-	fmt.Println(p)
+	//fmt.Println(p)
 
 	var outName string
 	if fInfo.IsDir() {

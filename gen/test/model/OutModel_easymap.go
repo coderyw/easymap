@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/coderyw/easymap/facade"
+	"github.com/coderyw/easymap/gen/facade"
 	unsafe "unsafe"
 )
 
