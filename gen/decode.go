@@ -142,7 +142,7 @@ func isExportedOrBuiltinType(t reflect.Type) bool {
 	for t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
-	fmt.Println(t.PkgPath())
+	//fmt.Println(t.PkgPath())
 	// PkgPath will be non-empty even for an exported type,
 	// so we need to check the type name as well.
 	return isExported(t.Name()) || t.PkgPath() == ""
@@ -290,6 +290,7 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 	} else if t.Kind() == reflect.Struct {
 		return g.decodeStructField1(field, t, false, pkgPath)
 	} else if t.Kind() == reflect.Array || t.Kind() == reflect.Slice {
+		return nil, nil
 		return g.decodeArrayField(field, t, isPtr, pkgPath)
 	}
 	add := ""
@@ -385,16 +386,17 @@ func (g *generator) decodeStructField1(field reflect.StructField, t reflect.Type
 		t = t.Elem()
 		isPtr = true
 	}
+	g.imports[pkgFacade] = "github.com/coderyw/easymap/facade"
 
 	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=v.%v", field.Name))
 	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok {"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b,ok :=i.(facade.EasyMapInter); ok  {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b,ok :=i.(%v.EasyMapInter); ok  {", pkgFacade))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMapInterface(m1); err != nil {"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok {"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b, ok := i.(facade.EasyMapString); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b, ok := i.(%v.EasyMapString); ok {", pkgFacade))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMap(m2); err != nil {"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
@@ -413,12 +415,12 @@ func (g *generator) decodeArrayField(field reflect.StructField, t reflect.Type, 
 		arrFieldIsPtr = true
 		t = t.Elem()
 	}
-
+	name := t.Name()
 	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.([]map[string]interface{}); ok {"))
 	if arrFieldIsPtr {
-		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]*%v, 0)", t.Name()))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]*%v, 0)", name))
 	} else {
-		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]%v, 0)", t.Name()))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tvv := make([]%v, 0)", name))
 	}
 
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\tfor _, v1 := range m1 {"))

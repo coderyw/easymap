@@ -17,6 +17,7 @@ import (
 
 const pkgStrconv = "strconv"
 const pkgUnsafe = "unsafe"
+const pkgFacade = "easy_facade"
 
 type generator struct {
 	pkgName       string
