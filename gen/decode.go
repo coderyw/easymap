@@ -320,7 +320,10 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 
 	switch t.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		turnStr = t.Kind().String()
+		if turnStr == "" {
+			turnStr = t.Kind().String()
+		}
+
 		for _, v := range kindInterArr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v.String()))
 			if isPtr {
@@ -331,7 +334,9 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 			}
 		}
 	case reflect.Float32, reflect.Float64:
-		turnStr = t.Kind().String()
+		if turnStr == "" {
+			turnStr = t.Kind().String()
+		}
 		for _, v := range kindFloatArr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v.String()))
 			if isPtr {
@@ -342,7 +347,9 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 			}
 		}
 	case reflect.String, reflect.Bool:
-		turnStr = t.Kind().String()
+		if turnStr == "" {
+			turnStr = t.Kind().String()
+		}
 		fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", turnStr))
 		if isPtr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, turnStr))

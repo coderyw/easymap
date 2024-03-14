@@ -13,7 +13,10 @@ type Struct2 struct {
 	DD string `json:"dd"`
 }
 
+type EFe int32
+
 type Resp360 struct {
+	Efe     EFe    `json:"efe"`
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Data    []struct {
