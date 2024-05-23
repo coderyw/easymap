@@ -45,13 +45,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		if strings.HasPrefix(field.Name, "XXX_") {
 			continue
 		}
-		js = field.Tag.Get(tag)
-		if js == "" {
-			js = field.Tag.Get(jsTag)
-		}
-		if js == "" {
-			js = field.Name
-		}
+		js = g.getTag(field)
 		if js != "" {
 			if out, err := g.decodeField(field, field.Type, false, r.PkgPath()); err != nil {
 				break
@@ -100,13 +94,7 @@ func (g *generator) decodeInterStruct(r reflect.Type) error {
 		if strings.HasPrefix(field.Name, "XXX_") {
 			continue
 		}
-		js = field.Tag.Get(tag)
-		if js == "" {
-			js = field.Tag.Get(jsTag)
-		}
-		if js == "" {
-			js = field.Name
-		}
+		js = g.getTag(field)
 		if js != "" {
 			if out, err := g.decodeInterField(field, field.Type, false, r.PkgPath()); err != nil {
 				break

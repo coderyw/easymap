@@ -67,6 +67,8 @@ func (g *generator) getTag(s reflect.StructField) string {
 	tag := s.Tag.Get(tag)
 	if tag == "" {
 		tag = s.Tag.Get(jsTag)
+		arr := strings.Split(tag, ",")
+		tag = arr[0]
 	}
 	if tag == "" {
 		tag = s.Name
