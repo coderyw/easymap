@@ -79,6 +79,7 @@ func (g *generator) encodeField(fv reflect.Type, field reflect.StructField, isPt
 		return
 	}
 	if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
+		g.imports["fmt"] = "fmt"
 		if isPtr {
 			fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))
 			fmt.Fprintln(g.out, fmt.Sprintf("\t\tm[\"%v\"] = *v.%v", g.getTag(field), field.Name))
