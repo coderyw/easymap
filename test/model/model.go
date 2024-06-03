@@ -3,15 +3,18 @@ package model
 import "sync"
 
 type TestStruct struct {
-	A int     `json:"a"`
-	B string  `json:"b"`
-	C float64 `json:"c"`
-	D bool    `json:"d"`
+	A    int     `json:"a"`
+	B    string  `json:"b"`
+	C    float64 `json:"c"`
+	D    bool    `json:"d"`
+	Str1 Str     `json:"str1"`
 }
 
 type Struct2 struct {
 	DD string `json:"dd"`
 }
+
+type Str string
 
 type EFe int32
 

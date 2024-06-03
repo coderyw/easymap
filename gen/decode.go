@@ -297,12 +297,18 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		}
 
 	}
-	kindInterArr := []reflect.Kind{
-		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+	kindInterArr := map[string]struct{}{
+		reflect.Int.String(): {}, reflect.Int8.String(): {}, reflect.Int16.String(): {}, reflect.Int32.String(): {}, reflect.Int64.String(): {},
+		reflect.Uint.String(): {}, reflect.Uint8.String(): {}, reflect.Uint16.String(): {}, reflect.Uint32.String(): {}, reflect.Uint64.String(): {},
 	}
-	kindFloatArr := []reflect.Kind{
-		reflect.Float32, reflect.Float64,
+	kindFloatArr := map[string]struct{}{
+		reflect.Float32.String(): {}, reflect.Float64.String(): {},
+	}
+	kindString := map[string]struct{}{
+		reflect.String.String(): {},
+	}
+	kindBool := map[string]struct{}{
+		reflect.Bool.String(): {},
 	}
 	fmt.Fprintln(out, fmt.Sprintf("\t\tswitch val.(type){"))
 
@@ -311,39 +317,57 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		if turnStr == "" {
 			turnStr = t.Kind().String()
 		}
-
-		for _, v := range kindInterArr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v.String()))
+		kindInterArr[turnStr] = struct{}{}
+		for v := range kindInterArr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v.String()))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
 			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v.String()))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
 			}
 		}
 	case reflect.Float32, reflect.Float64:
 		if turnStr == "" {
 			turnStr = t.Kind().String()
 		}
-		for _, v := range kindFloatArr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v.String()))
+		kindFloatArr[turnStr] = struct{}{}
+		for v := range kindFloatArr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v.String()))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
 			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v.String()))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
 			}
 		}
-	case reflect.String, reflect.Bool:
+	case reflect.String:
 		if turnStr == "" {
 			turnStr = t.Kind().String()
 		}
-		fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", turnStr))
-		if isPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, turnStr))
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
-		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, turnStr))
+		kindString[turnStr] = struct{}{}
+		for v := range kindString {
+			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
+			if isPtr {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
+			} else {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
+			}
+		}
+	case reflect.Bool:
+		if turnStr == "" {
+			turnStr = t.Kind().String()
+		}
+		kindString[turnStr] = struct{}{}
+		for v := range kindBool {
+			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
+			if isPtr {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
+			} else {
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
+			}
 		}
 
 	default:

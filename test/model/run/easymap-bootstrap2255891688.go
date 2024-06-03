@@ -18,7 +18,7 @@ import (
 func main() {
 	g := gen.NewGenerator("model_easymap.go")
 	g.SetPkg("model", "github.com/coderyw/easymap/test/model")
-	g.Add(&pkg.Resp360{})
+	g.Add(&pkg.TestStruct{})
 
 	if err := g.Run(os.Stdout); err != nil {
 		fmt.Fprintln(os.Stderr, err)
