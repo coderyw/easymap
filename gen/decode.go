@@ -37,7 +37,6 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 	)
 
 	var buf = new(bytes.Buffer)
-	fmt.Println(r.NumField())
 	for i := 0; i < r.NumField(); i++ {
 		field = r.Field(i)
 		if !isExportedOrBuiltinType(field.Type) {
@@ -51,7 +50,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 			if out, err := g.decodeField(field, field.Type, false, r.PkgPath()); err != nil {
 				continue
 			} else {
-				if out == nil {
+				if out == nil || out.Len() == 0 {
 					continue
 				}
 				fmt.Fprintln(buf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
@@ -100,7 +99,7 @@ func (g *generator) decodeInterStruct(r reflect.Type) error {
 			if out, err := g.decodeInterField(field, field.Type, false, r.PkgPath()); err != nil {
 				continue
 			} else {
-				if out == nil {
+				if out == nil || out.Len() == 0 {
 					continue
 				}
 				fmt.Fprintln(buf, fmt.Sprintf("\tif val,ok=m[\"%v\"];ok{", js))
