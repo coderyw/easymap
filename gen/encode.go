@@ -93,6 +93,11 @@ func (g *generator) encodeField(fv reflect.Type, field reflect.StructField, isPt
 	} else if fv.Kind() == reflect.Ptr {
 		fv = fv.Elem()
 		g.encodeField(fv, field, true)
+	} else if fv.Kind() == reflect.Struct {
+		var ifaceType = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+		if fv.Implements(ifaceType) {
+			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()", g.getTag(field), field.Name))
+		}
 	}
 }
 func (g *generator) encodeFieldString(fv reflect.Type, field reflect.StructField, isPtr bool) {
@@ -111,5 +116,10 @@ func (g *generator) encodeFieldString(fv reflect.Type, field reflect.StructField
 	} else if fv.Kind() == reflect.Ptr {
 		fv = fv.Elem()
 		g.encodeFieldString(fv, field, true)
+	} else if fv.Kind() == reflect.Struct {
+		var ifaceType = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+		if fv.Implements(ifaceType) {
+			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()", g.getTag(field), field.Name))
+		}
 	}
 }

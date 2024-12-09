@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/coderyw/easymap/gen/test/model/model_path"
 	"github.com/coderyw/easymap/gen/test/model1"
+	"github.com/shopspring/decimal"
 	"sync"
 )
 
@@ -47,8 +48,12 @@ type Struct2 struct {
 }
 
 type Resp360 struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code    int              `json:"code"`
+	Message string           `json:"message"`
+	B       int64            `json:"b"`
+	DD      []int            `json:"DD"`
+	Dec     decimal.Decimal  `json:"dec"`
+	PtrDec  *decimal.Decimal `json:"ptrDec"`
 	Data    []struct {
 		MatchId        string `json:"matchId"`
 		MatchTimeStamp string `json:"matchTimeStamp"`
@@ -72,7 +77,12 @@ type Resp360 struct {
 		} `json:"liveStreams"`
 		MatchState string `json:"matchState"`
 	} `json:"data"`
-	Else []interface{} `json:"else"`
+	Else   []interface{} `json:"else"`
+	AbcArr []Resp360Arr  `json:"abc_arr"`
+}
+
+type Resp360Arr struct {
+	Abc string `json:"abc"`
 }
 
 type WaitGroupWrapper struct {

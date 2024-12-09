@@ -18,6 +18,7 @@ import (
 const pkgStrconv = "strconv"
 const pkgUnsafe = "unsafe"
 const pkgFacade = "easy_facade"
+const pkgDecimal = "decimal"
 
 type generator struct {
 	pkgName       string
@@ -32,7 +33,7 @@ type generator struct {
 func NewGenerator(filename string) *generator {
 	ret := &generator{
 		fileName: filename,
-		imports:  map[string]string{
+		imports: map[string]string{
 			//pkgStrconv: "strconv",
 			//pkgUnsafe:  "unsafe",
 		},

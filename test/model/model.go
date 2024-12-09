@@ -1,6 +1,9 @@
 package model
 
-import "sync"
+import (
+	"github.com/shopspring/decimal"
+	"sync"
+)
 
 type TestStruct struct {
 	A    int     `json:"a"`
@@ -22,6 +25,9 @@ type Resp360 struct {
 	Efe     EFe    `json:"efe"`
 	Code    int    `json:"code"`
 	Message string `json:"message"`
+	Dec     decimal.Decimal
+	D       string `json:"d"`
+	Ab      []int  `json:"ab"`
 	Data    []struct {
 		MatchId        string `json:"matchId"`
 		MatchTimeStamp string `json:"matchTimeStamp"`

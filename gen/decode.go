@@ -37,6 +37,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 	)
 
 	var buf = new(bytes.Buffer)
+	fmt.Println(r.NumField())
 	for i := 0; i < r.NumField(); i++ {
 		field = r.Field(i)
 		if !isExportedOrBuiltinType(field.Type) {
@@ -48,7 +49,7 @@ func (g *generator) decodeStruct(r reflect.Type) error {
 		js = g.getTag(field)
 		if js != "" {
 			if out, err := g.decodeField(field, field.Type, false, r.PkgPath()); err != nil {
-				break
+				continue
 			} else {
 				if out == nil {
 					continue
@@ -97,7 +98,7 @@ func (g *generator) decodeInterStruct(r reflect.Type) error {
 		js = g.getTag(field)
 		if js != "" {
 			if out, err := g.decodeInterField(field, field.Type, false, r.PkgPath()); err != nil {
-				break
+				continue
 			} else {
 				if out == nil {
 					continue
@@ -253,7 +254,29 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 		}
 	case reflect.Ptr:
 		return g.decodeField(field, t.Elem(), true, pkgPath)
+	case reflect.Struct:
 
+		if tp.PkgPath() == "github.com/shopspring/decimal" && tp.Name() == "Decimal" {
+			g.imports[pkgDecimal] = "github.com/shopspring/decimal"
+			if isPtr {
+				fmt.Fprintln(out, fmt.Sprintf("\t\tvar err error"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\tvar decc decimal.Decimal"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\tdecc,err = decimal.NewFromString(val)"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\tif err!= nil {"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v = &decc", field.Name))
+			} else {
+				fmt.Fprintln(out, fmt.Sprintf("\t\tvar err error"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v,err = decimal.NewFromString(val)", field.Name))
+				fmt.Fprintln(out, fmt.Sprintf("\t\tif err!= nil {"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+			}
+		}
+		//type:.eq.github.com/shopspring/decimal.Decimal
+
+		return out, nil
 	default:
 		delete(g.imports, add)
 		return nil, nil
@@ -275,7 +298,7 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 	var tp reflect.Type = t
 	if t.Kind() == reflect.Ptr {
 		return g.decodeInterField(field, t.Elem(), true, pkgPath)
-	} else if t.Kind() == reflect.Struct {
+	} else if t.Kind() == reflect.Struct && !(tp.PkgPath() == "github.com/shopspring/decimal" && tp.Name() == "Decimal") {
 		return g.decodeStructField1(field, t, false, pkgPath)
 	} else if t.Kind() == reflect.Array || t.Kind() == reflect.Slice {
 		return nil, nil
@@ -310,7 +333,7 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 	kindBool := map[string]struct{}{
 		reflect.Bool.String(): {},
 	}
-	fmt.Fprintln(out, fmt.Sprintf("\t\tswitch val.(type){"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\tswitch acval:=val.(type){"))
 
 	switch t.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
@@ -321,10 +344,10 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		for v := range kindInterArr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(acval)", turnStr))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
 			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(acval)", field.Name, turnStr))
 			}
 		}
 	case reflect.Float32, reflect.Float64:
@@ -335,10 +358,10 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		for v := range kindFloatArr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(acval)", turnStr))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
 			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(acval)", field.Name, turnStr))
 			}
 		}
 	case reflect.String:
@@ -349,10 +372,10 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		for v := range kindString {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(acval)", turnStr))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
 			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(acval)", field.Name, turnStr))
 			}
 		}
 	case reflect.Bool:
@@ -363,12 +386,62 @@ func (g *generator) decodeInterField(field reflect.StructField, t reflect.Type, 
 		for v := range kindBool {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			if isPtr {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(val.(%v))", turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(acval)", turnStr))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", field.Name))
 			} else {
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(val.(%v))", field.Name, turnStr, v))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(acval)", field.Name, turnStr))
 			}
 		}
+	case reflect.Struct:
+		if tp.PkgPath() == "github.com/shopspring/decimal" && tp.Name() == "Decimal" {
+			g.imports[pkgDecimal] = "github.com/shopspring/decimal"
+			ab := []map[string]struct{}{
+				kindInterArr,
+				kindFloatArr,
+				kindString,
+			}
+			for i, v := range ab {
+				for k := range v {
+					fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", k))
+					switch i {
+					case 0:
+						if isPtr {
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromInt(int64(acval))"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", field.Name))
+						} else {
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromInt(int64(acval))", field.Name))
+						}
+					case 1:
+						if isPtr {
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromFloat(float64(acval))"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", field.Name))
+						} else {
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromFloat(float64(acval))", field.Name))
+						}
+					case 2:
+						if isPtr {
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar err error"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc,err = decimal.NewFromString(acval)"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err!= nil {"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\t\treturn err"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", field.Name))
+						} else {
+							fmt.Fprintln(out, fmt.Sprintf("\t\tvar err error"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v,err = decimal.NewFromString(acval)", field.Name))
+							fmt.Fprintln(out, fmt.Sprintf("\t\tif err!= nil {"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
+							fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+						}
+					}
+				}
+			}
+
+		}
+		//type:.eq.github.com/shopspring/decimal.Decimal
 
 	default:
 		delete(g.imports, add)
