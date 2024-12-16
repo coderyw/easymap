@@ -272,6 +272,8 @@ func (g *generator) decodeField(field reflect.StructField, t reflect.Type, isPtr
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
 			}
+		} else {
+			delete(g.imports, add)
 		}
 		//type:.eq.github.com/shopspring/decimal.Decimal
 

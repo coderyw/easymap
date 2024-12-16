@@ -4,6 +4,7 @@ import (
 	"github.com/coderyw/easymap/gen/test/model/model_path"
 	"github.com/coderyw/easymap/gen/test/model1"
 	"github.com/shopspring/decimal"
+	grpc "google.golang.org/grpc"
 	"sync"
 )
 
@@ -42,9 +43,14 @@ type EasyMAP_exporter_ConfigureAliCdnDomainReq *ConfigureAliCdnDomainReq
 type EasyMAP_exporter_OnlyInterface *OnlyInterface
 type EasyMAP_exporter_ErrorStruct *ErrorStruct
 type EasyMAP_exporter_StreamCtlServiceServer *StreamCtlServiceServer
+type EasyMAP_exporter_caMsgServiceClient *CaMsgServiceClient
 
 type Struct2 struct {
 	DD string `json:"dd"`
+}
+
+type CaMsgServiceClient struct {
+	cc *grpc.ClientConn `json:"cc,omitempty"`
 }
 
 type Resp360 struct {
