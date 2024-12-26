@@ -33,7 +33,7 @@ type generator struct {
 func NewGenerator(filename string) *generator {
 	ret := &generator{
 		fileName: filename,
-		imports: map[string]string{
+		imports:  map[string]string{
 			//pkgStrconv: "strconv",
 			//pkgUnsafe:  "unsafe",
 		},
@@ -70,9 +70,11 @@ func (g *generator) Run(out io.Writer) error {
 		if err = g.encode(t); err != nil {
 			continue
 		}
+		g.genOther(t)
 		if err = g.encodeConst(t); err != nil {
 			continue
 		}
+
 	}
 	//fmt.Println(g.out.String())
 	g.writeImports(out)
