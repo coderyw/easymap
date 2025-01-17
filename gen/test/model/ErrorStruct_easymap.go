@@ -273,6 +273,39 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int(tmp)
 			}
 			v.DD = tmpArr
+		case []interface{}:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				switch trueK := k.(type) {
+				case int:
+					tmpArr[i] = trueK
+				case int8:
+					tmpArr[i] = int(trueK)
+				case int16:
+					tmpArr[i] = int(trueK)
+				case int32:
+					tmpArr[i] = int(trueK)
+				case int64:
+					tmpArr[i] = int(trueK)
+				case uint8:
+					tmpArr[i] = int(trueK)
+				case uint16:
+					tmpArr[i] = int(trueK)
+				case uint32:
+					tmpArr[i] = int(trueK)
+				case uint64:
+					tmpArr[i] = int(trueK)
+				case string:
+					tmp, err := strconv.ParseInt(trueK, 10, 64)
+					if err != nil {
+						return err
+					}
+					tmpArr[i] = int(tmp)
+				case struct{}:
+
+				}
+			}
+			v.DD = tmpArr
 		}
 	}
 	if val, ok = m["dec"]; ok {
@@ -392,6 +425,29 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 					}
 				}
 				v.AbcArr[i] = kjj.(Resp360Arr)
+			}
+		case []interface{}:
+			v.AbcArr = make([]Resp360Arr, len(acval))
+			for i, k := range acval {
+				switch kt := k.(type) {
+				case map[string]interface{}:
+					var kjj interface{} = Resp360Arr{}
+					if b, ok := kjj.(easy_facade.EasyMapInter); ok {
+						if err := b.UnMarshalMapInterface(kt); err != nil {
+							return err
+						}
+					}
+					v.AbcArr[i] = kjj.(Resp360Arr)
+				case map[string]string:
+					var kjj interface{} = Resp360Arr{}
+					if b, ok := kjj.(easy_facade.EasyMapString); ok {
+						if err := b.UnMarshalMap(kt); err != nil {
+							return err
+						}
+					}
+					v.AbcArr[i] = kjj.(Resp360Arr)
+				}
+
 			}
 		}
 	}
