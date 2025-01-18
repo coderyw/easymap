@@ -18,8 +18,11 @@ import (
 func TestRun(t *testing.T) {
 	g := NewGenerator("model_easymap.go")
 	g.SetPkg("model", "github.com/coderyw/easymap/test/model")
-	g.Add(model.EasyMAP_exporter_Resp360(nil))
-	//g.Add(model.EasyMAP_exporter_UserCache(nil))
+	//g.Add(model.EasyMAP_exporter_Resp360(nil))
+	g.Add(model.EasyMAP_exporter_UserCache(nil))
+	g.Add(model.EasyMAP_exporter_PayAccount(nil))
+	g.Add(model.EasyMAP_exporter_Connection(nil))
+	g.Add(model.EasyMAP_exporter_UserTinyInfo(nil))
 	//g.Add(model.EasyMAP_exporter_OutModel(nil))
 	//g.Add(model.EasyMAP_exporter_caMsgServiceClient(nil))
 	//g.Add(model.EasyMAP_exporter_ConfigureAliCdnDomainReq(nil))

@@ -45,6 +45,9 @@ type EasyMAP_exporter_ErrorStruct *ErrorStruct
 type EasyMAP_exporter_StreamCtlServiceServer *StreamCtlServiceServer
 type EasyMAP_exporter_caMsgServiceClient *CaMsgServiceClient
 type EasyMAP_exporter_UserCache *UserCache
+type EasyMAP_exporter_PayAccount *PayAccount
+type EasyMAP_exporter_Connection *Connection
+type EasyMAP_exporter_UserTinyInfo *UserTinyInfo
 
 type Struct2 struct {
 	DD string `json:"dd"`
@@ -60,6 +63,11 @@ type Resp360 struct {
 	B       int64            `json:"b"`
 	Float   float32          `json:"float"`
 	DD      []int            `json:"DD"`
+	DDD     []*uint8         `json:"DDD"`
+	FFF     []float64        `json:"FFF"`
+	FFFF    []*float64       `json:"FFFF"`
+	SSS     []string         `json:"SSS"`
+	SSSS    []*string        `json:"SSSS"`
 	Dec     decimal.Decimal  `json:"dec"`
 	PtrDec  *decimal.Decimal `json:"ptrDec"`
 	Data    []struct {
@@ -85,8 +93,11 @@ type Resp360 struct {
 		} `json:"liveStreams"`
 		MatchState string `json:"matchState"`
 	} `json:"data"`
-	Else   []interface{} `json:"else"`
-	AbcArr []Resp360Arr  `json:"abc_arr"`
+	Else          []interface{}      `json:"else"`
+	AbcArr        []Resp360Arr       `json:"abc_arr"`
+	UnEasyMapArr  []model1.UnEasyMap `json:"unEasyMapArr"`
+	DecimalArr    []decimal.Decimal  `json:"decimal_arr"`
+	DecimalArrPtr []*decimal.Decimal `json:"decimal_arr_ptr"`
 }
 
 type Resp360Arr struct {
