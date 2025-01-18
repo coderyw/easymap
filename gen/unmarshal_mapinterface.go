@@ -808,6 +808,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tswitch trueK := k.(type) {"))
 
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tcase map[string]string:"))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(trueK)==0{break}"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tvar kjj interface{} = &%v{}", name))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif b, ok := kjj.(easy_facade.EasyMapString); ok {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\tif err := b.UnMarshalMap(trueK); err != nil {"))
@@ -820,6 +821,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		}
 
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tcase map[string]interface{}:"))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(trueK)==0{break}"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tvar kjj interface{} = &%v{}", name))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif b, ok := kjj.(easy_facade.EasyMapInter); ok {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\tif err := b.UnMarshalMapInterface(trueK); err != nil {"))
@@ -838,6 +840,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		if !arrFieldIsPtr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]%v, len(acval))", fieldName, name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapString); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMap(k); err != nil { return err }}"))
@@ -845,6 +848,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		} else {
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]*%v, len(acval))", fieldName, name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapString); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMap(k); err != nil { return err }}"))
@@ -854,6 +858,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		if !arrFieldIsPtr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]%v, len(acval))", fieldName, name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapInter); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMapInterface(k); err != nil { return err }}"))
@@ -861,6 +866,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		} else {
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]*%v, len(acval))", fieldName, name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapInter); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMapInterface(k); err != nil { return err }}"))

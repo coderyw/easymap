@@ -280,7 +280,7 @@ func (g *generator) decodeStructField1(fieldName string, t reflect.Type, isPtr b
 		g.imports[modelName] = t.PkgPath()
 	}
 
-	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok && len(m1) > 0{"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=&%v{}", name))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b,ok :=i.(%v.EasyMapInter); ok  {", pkgFacade))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMapInterface(m1); err != nil {"))
@@ -293,7 +293,7 @@ func (g *generator) decodeStructField1(fieldName string, t reflect.Type, isPtr b
 	}
 
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok {"))
+	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok && len(m1) > 0{"))
 	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=&%v{}", name))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b, ok := i.(%v.EasyMapString); ok {", pkgFacade))
 	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMap(m2); err != nil {"))

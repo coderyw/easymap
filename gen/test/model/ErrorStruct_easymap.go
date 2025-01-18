@@ -65,7 +65,21 @@ func (v *UserTinyInfo) UnMarshalMapInterface(m map[string]interface{}) error {
 	)
 	if val, ok = m["user_id"]; ok {
 		switch acval := val.(type) {
+		case uint8:
+			v.UserId = int64(acval)
 		case uint16:
+			v.UserId = int64(acval)
+		case uint64:
+			v.UserId = int64(acval)
+		case int16:
+			v.UserId = int64(acval)
+		case int64:
+			v.UserId = int64(acval)
+		case int32:
+			v.UserId = int64(acval)
+		case uint:
+			v.UserId = int64(acval)
+		case uint32:
 			v.UserId = int64(acval)
 		case string:
 			if len(acval) == 0 {
@@ -77,62 +91,52 @@ func (v *UserTinyInfo) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.UserId = int64(pvv)
 			}
-		case int:
-			v.UserId = int64(acval)
-		case int16:
-			v.UserId = int64(acval)
-		case int64:
-			v.UserId = int64(acval)
-		case uint:
-			v.UserId = int64(acval)
-		case uint8:
+		case float32:
 			v.UserId = int64(acval)
 		case float64:
 			v.UserId = int64(acval)
+		case int:
+			v.UserId = int64(acval)
 		case int8:
-			v.UserId = int64(acval)
-		case int32:
-			v.UserId = int64(acval)
-		case uint32:
-			v.UserId = int64(acval)
-		case uint64:
-			v.UserId = int64(acval)
-		case float32:
 			v.UserId = int64(acval)
 		}
 	}
 	if val, ok = m["nickname"]; ok {
 		switch acval := val.(type) {
-		case float64:
-			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.Nickname = acval
-		case int8:
+		case int:
+			v.Nickname = strconv.FormatInt(int64(acval), 10)
+		case int16:
 			v.Nickname = strconv.FormatInt(int64(acval), 10)
 		case int32:
+			v.Nickname = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.Nickname = strconv.FormatUint(uint64(acval), 10)
+		case float32:
+			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case float64:
+			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int8:
+			v.Nickname = strconv.FormatInt(int64(acval), 10)
+		case int64:
 			v.Nickname = strconv.FormatInt(int64(acval), 10)
 		case uint8:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.Nickname = strconv.FormatUint(uint64(acval), 10)
-		case int:
-			v.Nickname = strconv.FormatInt(int64(acval), 10)
-		case int16:
-			v.Nickname = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.Nickname = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.Nickname = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case uint64:
+			v.Nickname = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["avatar"]; ok {
 		switch acval := val.(type) {
+		case string:
+			v.Avatar = acval
+		case int8:
+			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case int16:
 			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case uint:
@@ -141,11 +145,7 @@ func (v *UserTinyInfo) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.Avatar = strconv.FormatUint(uint64(acval), 10)
 		case float64:
 			v.Avatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case string:
-			v.Avatar = acval
 		case int:
-			v.Avatar = strconv.FormatInt(int64(acval), 10)
-		case int8:
 			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.Avatar = strconv.FormatInt(int64(acval), 10)
@@ -163,47 +163,41 @@ func (v *UserTinyInfo) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fb_avatar"]; ok {
 		switch acval := val.(type) {
+		case string:
+			v.FbAvatar = acval
 		case int8:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
 		case int16:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
-		case string:
-			v.FbAvatar = acval
-		case int:
+		case int64:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
 		case uint:
 			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
+		case uint8:
 			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
 			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case float32:
 			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int:
+			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
+		case uint16:
+			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["invite_code"]; ok {
 		switch acval := val.(type) {
-		case int16:
-			v.InviteCode = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.InviteCode = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case float32:
 			v.InviteCode = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case string:
-			v.InviteCode = acval
-		case int8:
+		case int32:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
@@ -213,42 +207,48 @@ func (v *UserTinyInfo) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
 		case uint64:
 			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.InviteCode = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case uint32:
+			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
+		case string:
+			v.InviteCode = acval
 		case int:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
-		case int32:
+		case int8:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
+		case int16:
+			v.InviteCode = strconv.FormatInt(int64(acval), 10)
+		case uint8:
+			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["phone"]; ok {
 		switch acval := val.(type) {
+		case uint16:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case float32:
+			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int32:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case uint8:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.Phone = acval
 		case int:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
 		case int8:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float64:
-			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case int16:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 
@@ -376,11 +376,23 @@ func (v *PayAccount) UnMarshalMapInterface(m map[string]interface{}) error {
 	)
 	if val, ok = m["email"]; ok {
 		switch acval := val.(type) {
-		case float64:
+		case int:
+			v.Email = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.Email = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.Email = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.Email = strconv.FormatUint(uint64(acval), 10)
+		case float32:
 			v.Email = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.Email = acval
 		case int8:
+			v.Email = strconv.FormatInt(int64(acval), 10)
+		case int16:
+			v.Email = strconv.FormatInt(int64(acval), 10)
+		case int32:
 			v.Email = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.Email = strconv.FormatInt(int64(acval), 10)
@@ -388,42 +400,18 @@ func (v *PayAccount) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.Email = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.Email = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.Email = strconv.FormatUint(uint64(acval), 10)
-		case float32:
+		case float64:
 			v.Email = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int:
-			v.Email = strconv.FormatInt(int64(acval), 10)
-		case int16:
-			v.Email = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.Email = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.Email = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.Email = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["phone"]; ok {
 		switch acval := val.(type) {
 		case string:
 			v.Phone = acval
-		case int8:
+		case int:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
 		case int16:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case uint16:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		case uint8:
 			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
@@ -432,36 +420,48 @@ func (v *PayAccount) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		case float64:
 			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case float32:
+			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int8:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case int32:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case uint16:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["name"]; ok {
 		switch acval := val.(type) {
-		case uint64:
-			v.Name = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.Name = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int64:
-			v.Name = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.Name = strconv.FormatUint(uint64(acval), 10)
-		case uint8:
-			v.Name = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
-			v.Name = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
 			v.Name = strconv.FormatUint(uint64(acval), 10)
 		case float32:
 			v.Name = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.Name = acval
-		case int:
-			v.Name = strconv.FormatInt(int64(acval), 10)
-		case int8:
-			v.Name = strconv.FormatInt(int64(acval), 10)
 		case int16:
 			v.Name = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.Name = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.Name = strconv.FormatUint(uint64(acval), 10)
+		case uint8:
+			v.Name = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.Name = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int:
+			v.Name = strconv.FormatInt(int64(acval), 10)
+		case int8:
+			v.Name = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.Name = strconv.FormatInt(int64(acval), 10)
+		case uint16:
+			v.Name = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.Name = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 
@@ -775,7 +775,11 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	)
 	if val, ok = m["id"]; ok {
 		switch acval := val.(type) {
-		case uint16:
+		case int64:
+			v.ID = int64(acval)
+		case uint:
+			v.ID = int64(acval)
+		case uint8:
 			v.ID = int64(acval)
 		case uint32:
 			v.ID = int64(acval)
@@ -783,13 +787,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.ID = int64(acval)
 		case int:
 			v.ID = int64(acval)
-		case int8:
+		case int16:
 			v.ID = int64(acval)
-		case int64:
-			v.ID = int64(acval)
-		case uint8:
-			v.ID = int64(acval)
-		case uint64:
+		case int32:
 			v.ID = int64(acval)
 		case string:
 			if len(acval) == 0 {
@@ -803,34 +803,16 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 		case float64:
 			v.ID = int64(acval)
-		case int16:
+		case int8:
 			v.ID = int64(acval)
-		case int32:
+		case uint16:
 			v.ID = int64(acval)
-		case uint:
+		case uint64:
 			v.ID = int64(acval)
 		}
 	}
 	if val, ok = m["user_id"]; ok {
 		switch acval := val.(type) {
-		case int8:
-			v.UserID = int64(acval)
-		case int32:
-			v.UserID = int64(acval)
-		case int64:
-			v.UserID = int64(acval)
-		case uint32:
-			v.UserID = int64(acval)
-		case int:
-			v.UserID = int64(acval)
-		case int16:
-			v.UserID = int64(acval)
-		case uint:
-			v.UserID = int64(acval)
-		case uint8:
-			v.UserID = int64(acval)
-		case uint16:
-			v.UserID = int64(acval)
 		case uint64:
 			v.UserID = int64(acval)
 		case string:
@@ -847,21 +829,43 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.UserID = int64(acval)
 		case float64:
 			v.UserID = int64(acval)
+		case int:
+			v.UserID = int64(acval)
+		case int8:
+			v.UserID = int64(acval)
+		case int16:
+			v.UserID = int64(acval)
+		case int32:
+			v.UserID = int64(acval)
+		case uint32:
+			v.UserID = int64(acval)
+		case int64:
+			v.UserID = int64(acval)
+		case uint:
+			v.UserID = int64(acval)
+		case uint8:
+			v.UserID = int64(acval)
+		case uint16:
+			v.UserID = int64(acval)
 		}
 	}
 	if val, ok = m["balance"]; ok {
 		switch acval := val.(type) {
-		case uint8:
-			v.Balance = int64(acval)
 		case uint16:
+			v.Balance = int64(acval)
+		case float64:
 			v.Balance = int64(acval)
 		case int:
 			v.Balance = int64(acval)
-		case int8:
-			v.Balance = int64(acval)
 		case int64:
 			v.Balance = int64(acval)
+		case uint8:
+			v.Balance = int64(acval)
 		case uint:
+			v.Balance = int64(acval)
+		case uint32:
+			v.Balance = int64(acval)
+		case uint64:
 			v.Balance = int64(acval)
 		case string:
 			if len(acval) == 0 {
@@ -875,172 +879,172 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 		case float32:
 			v.Balance = int64(acval)
-		case float64:
+		case int8:
 			v.Balance = int64(acval)
 		case int16:
 			v.Balance = int64(acval)
 		case int32:
-			v.Balance = int64(acval)
-		case uint32:
-			v.Balance = int64(acval)
-		case uint64:
 			v.Balance = int64(acval)
 		}
 	}
 	if val, ok = m["nickname"]; ok {
 		switch acval := val.(type) {
+		case string:
+			v.Nickname = acval
 		case int16:
 			v.Nickname = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.Nickname = strconv.FormatInt(int64(acval), 10)
-		case uint:
+		case uint32:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case uint8:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
+		case uint16:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
 		case uint64:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case string:
-			v.Nickname = acval
 		case int:
 			v.Nickname = strconv.FormatInt(int64(acval), 10)
 		case int8:
 			v.Nickname = strconv.FormatInt(int64(acval), 10)
+		case int32:
+			v.Nickname = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.Nickname = strconv.FormatInt(int64(acval), 10)
-		case uint16:
+		case uint:
 			v.Nickname = strconv.FormatUint(uint64(acval), 10)
-		case float64:
+		case float32:
 			v.Nickname = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["avatar"]; ok {
 		switch acval := val.(type) {
-		case int:
-			v.Avatar = strconv.FormatInt(int64(acval), 10)
-		case int8:
-			v.Avatar = strconv.FormatInt(int64(acval), 10)
+		case uint64:
+			v.Avatar = strconv.FormatUint(uint64(acval), 10)
 		case float64:
 			v.Avatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case uint16:
-			v.Avatar = strconv.FormatUint(uint64(acval), 10)
+		case int64:
+			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case uint32:
 			v.Avatar = strconv.FormatUint(uint64(acval), 10)
-		case string:
-			v.Avatar = acval
+		case int8:
+			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case int16:
 			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case int32:
-			v.Avatar = strconv.FormatInt(int64(acval), 10)
-		case int64:
 			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case uint:
 			v.Avatar = strconv.FormatUint(uint64(acval), 10)
 		case uint8:
 			v.Avatar = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
+		case uint16:
 			v.Avatar = strconv.FormatUint(uint64(acval), 10)
+		case string:
+			v.Avatar = acval
+		case int:
+			v.Avatar = strconv.FormatInt(int64(acval), 10)
 		case float32:
 			v.Avatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["fb_avatar"]; ok {
 		switch acval := val.(type) {
-		case uint:
-			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
+		case float32:
+			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case string:
+			v.FbAvatar = acval
 		case int8:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
 		case int16:
+			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
+		case uint8:
+			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
-		case uint8:
+		case uint:
 			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
 		case uint64:
 			v.FbAvatar = strconv.FormatUint(uint64(acval), 10)
-		case string:
-			v.FbAvatar = acval
-		case int:
-			v.FbAvatar = strconv.FormatInt(int64(acval), 10)
-		case float64:
-			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float32:
-			v.FbAvatar = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["phone"]; ok {
 		switch acval := val.(type) {
-		case float64:
-			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int8:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.Phone = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		case uint:
 			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.Phone = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case float32:
 			v.Phone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case uint8:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		case string:
 			v.Phone = acval
 		case int:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case int8:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
 		case int16:
+			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case int32:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.Phone = strconv.FormatInt(int64(acval), 10)
+		case uint64:
+			v.Phone = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["gcash_phone"]; ok {
 		switch acval := val.(type) {
+		case int:
+			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
 		case uint16:
 			v.GcashPhone = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.GcashPhone = strconv.FormatUint(uint64(acval), 10)
-		case int32:
-			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
+		case float64:
+			v.GcashPhone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case uint:
 			v.GcashPhone = strconv.FormatUint(uint64(acval), 10)
-		case int8:
-			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
-		case int16:
-			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
 		case uint8:
 			v.GcashPhone = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
 			v.GcashPhone = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.GcashPhone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.GcashPhone = acval
-		case int:
+		case int8:
 			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
+		case int16:
+			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
+		case int32:
+			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.GcashPhone = strconv.FormatInt(int64(acval), 10)
+		case uint64:
+			v.GcashPhone = strconv.FormatUint(uint64(acval), 10)
 		case float32:
 			v.GcashPhone = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["gcash_customer_id"]; ok {
 		switch acval := val.(type) {
-		case float64:
-			v.GcashCustomerID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case uint:
+			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
+		case uint16:
+			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
 		case int:
 			v.GcashCustomerID = strconv.FormatInt(int64(acval), 10)
 		case int8:
@@ -1049,71 +1053,53 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.GcashCustomerID = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.GcashCustomerID = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.GcashCustomerID = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.GcashCustomerID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case float32:
+			v.GcashCustomerID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.GcashCustomerID = acval
+		case int64:
+			v.GcashCustomerID = strconv.FormatInt(int64(acval), 10)
 		case uint8:
-			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
 			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
 			v.GcashCustomerID = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.GcashCustomerID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["withdraw_password"]; ok {
 		switch acval := val.(type) {
+		case float32:
+			v.WithdrawPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.WithdrawPassword = acval
+		case int:
+			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
 		case int8:
+			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
+		case int16:
+			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
+		case uint32:
+			v.WithdrawPassword = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.WithdrawPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int32:
 			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
 		case uint:
 			v.WithdrawPassword = strconv.FormatUint(uint64(acval), 10)
 		case uint8:
 			v.WithdrawPassword = strconv.FormatUint(uint64(acval), 10)
-		case int:
-			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
-		case int16:
-			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.WithdrawPassword = strconv.FormatInt(int64(acval), 10)
 		case uint16:
-			v.WithdrawPassword = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
 			v.WithdrawPassword = strconv.FormatUint(uint64(acval), 10)
 		case uint64:
 			v.WithdrawPassword = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.WithdrawPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float32:
-			v.WithdrawPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["login_password"]; ok {
 		switch acval := val.(type) {
-		case string:
-			v.LoginPassword = acval
 		case int8:
-			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
-		case int16:
-			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
-		case int32:
-			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.LoginPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float32:
-			v.LoginPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int:
 			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
@@ -1121,23 +1107,31 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
 		case uint64:
 			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
+		case string:
+			v.LoginPassword = acval
+		case int:
+			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
+		case int16:
+			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
+		case int32:
+			v.LoginPassword = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.LoginPassword = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.LoginPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case float32:
+			v.LoginPassword = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["pay_account_id"]; ok {
 		switch acval := val.(type) {
-		case int:
-			v.PayAccountID = int64(acval)
-		case int16:
+		case uint8:
 			v.PayAccountID = int64(acval)
 		case uint16:
-			v.PayAccountID = int64(acval)
-		case float32:
-			v.PayAccountID = int64(acval)
-		case uint32:
 			v.PayAccountID = int64(acval)
 		case uint64:
 			v.PayAccountID = int64(acval)
@@ -1151,15 +1145,21 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.PayAccountID = int64(pvv)
 			}
+		case uint:
+			v.PayAccountID = int64(acval)
+		case uint32:
+			v.PayAccountID = int64(acval)
+		case float32:
+			v.PayAccountID = int64(acval)
+		case int:
+			v.PayAccountID = int64(acval)
 		case int8:
+			v.PayAccountID = int64(acval)
+		case int16:
 			v.PayAccountID = int64(acval)
 		case int32:
 			v.PayAccountID = int64(acval)
 		case int64:
-			v.PayAccountID = int64(acval)
-		case uint:
-			v.PayAccountID = int64(acval)
-		case uint8:
 			v.PayAccountID = int64(acval)
 		case float64:
 			v.PayAccountID = int64(acval)
@@ -1167,7 +1167,13 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["card_back"]; ok {
 		switch acval := val.(type) {
-		case uint16:
+		case int8:
+			v.CardBack = int(acval)
+		case int16:
+			v.CardBack = int(acval)
+		case int64:
+			v.CardBack = int(acval)
+		case uint8:
 			v.CardBack = int(acval)
 		case float32:
 			v.CardBack = int(acval)
@@ -1175,11 +1181,13 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.CardBack = int(acval)
 		case int:
 			v.CardBack = int(acval)
-		case int16:
+		case int32:
 			v.CardBack = int(acval)
-		case int64:
+		case uint:
 			v.CardBack = int(acval)
-		case uint8:
+		case uint16:
+			v.CardBack = int(acval)
+		case uint32:
 			v.CardBack = int(acval)
 		case uint64:
 			v.CardBack = int(acval)
@@ -1193,22 +1201,10 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.CardBack = int(pvv)
 			}
-		case int8:
-			v.CardBack = int(acval)
-		case int32:
-			v.CardBack = int(acval)
-		case uint:
-			v.CardBack = int(acval)
-		case uint32:
-			v.CardBack = int(acval)
 		}
 	}
 	if val, ok = m["avatar_frame"]; ok {
 		switch acval := val.(type) {
-		case uint:
-			v.AvatarFrame = int(acval)
-		case uint32:
-			v.AvatarFrame = int(acval)
 		case string:
 			if len(acval) == 0 {
 				v.AvatarFrame = 0
@@ -1219,75 +1215,89 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.AvatarFrame = int(pvv)
 			}
-		case float32:
+		case float64:
 			v.AvatarFrame = int(acval)
 		case int16:
 			v.AvatarFrame = int(acval)
+		case int32:
+			v.AvatarFrame = int(acval)
 		case int64:
 			v.AvatarFrame = int(acval)
-		case int32:
+		case uint:
 			v.AvatarFrame = int(acval)
 		case uint8:
 			v.AvatarFrame = int(acval)
-		case uint16:
-			v.AvatarFrame = int(acval)
-		case uint64:
-			v.AvatarFrame = int(acval)
-		case float64:
+		case float32:
 			v.AvatarFrame = int(acval)
 		case int:
 			v.AvatarFrame = int(acval)
 		case int8:
+			v.AvatarFrame = int(acval)
+		case uint16:
+			v.AvatarFrame = int(acval)
+		case uint32:
+			v.AvatarFrame = int(acval)
+		case uint64:
 			v.AvatarFrame = int(acval)
 		}
 	}
 	if val, ok = m["app_package_name"]; ok {
 		switch acval := val.(type) {
-		case int64:
-			v.AppPackageName = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
-		case uint32:
-			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
 		case string:
 			v.AppPackageName = acval
 		case int:
 			v.AppPackageName = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.AppPackageName = strconv.FormatInt(int64(acval), 10)
+		case uint32:
+			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.AppPackageName = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case uint64:
+			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
+		case float32:
+			v.AppPackageName = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case int8:
 			v.AppPackageName = strconv.FormatInt(int64(acval), 10)
 		case int16:
 			v.AppPackageName = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.AppPackageName = strconv.FormatInt(int64(acval), 10)
+		case uint:
+			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
 		case uint8:
 			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.AppPackageName = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.AppPackageName = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float32:
-			v.AppPackageName = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["bind"]; ok {
 		switch acval := val.(type) {
-		case []int:
-			v.Bind = acval
+		case []int64:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []uint8:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []uint16:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []int16:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
 		case []int32:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []uint:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []uint32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -1297,6 +1307,16 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []string:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseInt(k, 10, 64)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = int(tmp)
 			}
 			v.Bind = tmpArr
 		case []interface{}:
@@ -1338,13 +1358,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.Bind = tmpArr
-		case []float64:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []uint16:
+		case []int:
+			v.Bind = acval
+		case []float32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -1356,35 +1372,19 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int(k)
 			}
 			v.Bind = tmpArr
-		case []uint8:
+		case []uint32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.Bind = tmpArr
-		case []int16:
+		case []float64:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.Bind = tmpArr
-		case []int64:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []string:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseInt(k, 10, 64)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = int(tmp)
-			}
-			v.Bind = tmpArr
-		case []float32:
+		case []uint:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -1394,96 +1394,96 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["type"]; ok {
 		switch acval := val.(type) {
-		case uint32:
+		case int32:
+			v.Type = strconv.FormatInt(int64(acval), 10)
+		case uint8:
 			v.Type = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.Type = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.Type = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.Type = acval
-		case int:
-			v.Type = strconv.FormatInt(int64(acval), 10)
 		case int8:
 			v.Type = strconv.FormatInt(int64(acval), 10)
-		case int32:
+		case int16:
 			v.Type = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.Type = strconv.FormatInt(int64(acval), 10)
 		case uint:
 			v.Type = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.Type = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int16:
-			v.Type = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.Type = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.Type = strconv.FormatUint(uint64(acval), 10)
-		case float64:
+		case uint32:
+			v.Type = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.Type = strconv.FormatUint(uint64(acval), 10)
+		case int:
+			v.Type = strconv.FormatInt(int64(acval), 10)
+		case float32:
 			v.Type = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
 	}
 	if val, ok = m["invite_user_id"]; ok {
 		switch acval := val.(type) {
-		case uint32:
-			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
+		case float32:
+			v.InviteUserID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case string:
 			v.InviteUserID = acval
-		case int16:
+		case int32:
 			v.InviteUserID = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.InviteUserID = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
 			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
 		case float64:
 			v.InviteUserID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float32:
-			v.InviteUserID = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case uint:
+			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
+		case uint8:
+			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
 		case int:
 			v.InviteUserID = strconv.FormatInt(int64(acval), 10)
 		case int8:
 			v.InviteUserID = strconv.FormatInt(int64(acval), 10)
-		case int32:
+		case int16:
 			v.InviteUserID = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.InviteUserID = strconv.FormatUint(uint64(acval), 10)
+		case int64:
+			v.InviteUserID = strconv.FormatInt(int64(acval), 10)
 		}
 	}
 	if val, ok = m["invite_code"]; ok {
 		switch acval := val.(type) {
-		case string:
-			v.InviteCode = acval
-		case int16:
+		case uint64:
+			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
+		case float64:
+			v.InviteCode = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int8:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
 		case uint:
 			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
+		case uint8:
+			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
+			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
+		case int64:
+			v.InviteCode = strconv.FormatInt(int64(acval), 10)
+		case uint16:
 			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
 		case float32:
 			v.InviteCode = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float64:
-			v.InviteCode = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case string:
+			v.InviteCode = acval
 		case int:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
-		case int8:
+		case int16:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.InviteCode = strconv.FormatInt(int64(acval), 10)
-		case int64:
-			v.InviteCode = strconv.FormatInt(int64(acval), 10)
-		case uint8:
-			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
-			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.InviteCode = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["invite"]; ok {
-		if m1, ok := val.(map[string]interface{}); ok {
+		if m1, ok := val.(map[string]interface{}); ok && len(m1) > 0 {
 			var i interface{} = &UserTinyInfo{}
 			if b, ok := i.(easy_facade.EasyMapInter); ok {
 				if err := b.UnMarshalMapInterface(m1); err != nil {
@@ -1491,7 +1491,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.Invite = i.(*UserTinyInfo)
 			}
-		} else if m2, ok := val.(map[string]string); ok {
+		} else if m2, ok := val.(map[string]string); ok && len(m1) > 0 {
 			var i interface{} = &UserTinyInfo{}
 			if b, ok := i.(easy_facade.EasyMapString); ok {
 				if err := b.UnMarshalMap(m2); err != nil {
@@ -1503,9 +1503,21 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["is_register"]; ok {
 		switch acval := val.(type) {
+		case uint32:
+			v.IsRegister = uint8(acval)
+		case float64:
+			v.IsRegister = uint8(acval)
+		case int16:
+			v.IsRegister = uint8(acval)
+		case uint:
+			v.IsRegister = uint8(acval)
+		case uint16:
+			v.IsRegister = uint8(acval)
+		case int64:
+			v.IsRegister = uint8(acval)
 		case uint8:
 			v.IsRegister = uint8(acval)
-		case uint32:
+		case uint64:
 			v.IsRegister = uint8(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1517,30 +1529,40 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.IsRegister = uint8(pvv)
 			}
-		case int16:
-			v.IsRegister = uint8(acval)
-		case int32:
-			v.IsRegister = uint8(acval)
-		case int64:
-			v.IsRegister = uint8(acval)
-		case uint16:
-			v.IsRegister = uint8(acval)
-		case uint64:
-			v.IsRegister = uint8(acval)
 		case float32:
-			v.IsRegister = uint8(acval)
-		case float64:
 			v.IsRegister = uint8(acval)
 		case int:
 			v.IsRegister = uint8(acval)
 		case int8:
 			v.IsRegister = uint8(acval)
-		case uint:
+		case int32:
 			v.IsRegister = uint8(acval)
 		}
 	}
 	if val, ok = m["enable"]; ok {
 		switch acval := val.(type) {
+		case uint8:
+			v.Enable = uint8(acval)
+		case uint16:
+			v.Enable = uint8(acval)
+		case int:
+			v.Enable = uint8(acval)
+		case int8:
+			v.Enable = uint8(acval)
+		case int16:
+			v.Enable = uint8(acval)
+		case int64:
+			v.Enable = uint8(acval)
+		case uint:
+			v.Enable = uint8(acval)
+		case float64:
+			v.Enable = uint8(acval)
+		case int32:
+			v.Enable = uint8(acval)
+		case uint32:
+			v.Enable = uint8(acval)
+		case uint64:
+			v.Enable = uint8(acval)
 		case string:
 			if len(acval) == 0 {
 				v.Enable = 0
@@ -1553,38 +1575,10 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 		case float32:
 			v.Enable = uint8(acval)
-		case float64:
-			v.Enable = uint8(acval)
-		case int:
-			v.Enable = uint8(acval)
-		case int8:
-			v.Enable = uint8(acval)
-		case int32:
-			v.Enable = uint8(acval)
-		case uint16:
-			v.Enable = uint8(acval)
-		case uint32:
-			v.Enable = uint8(acval)
-		case uint64:
-			v.Enable = uint8(acval)
-		case int16:
-			v.Enable = uint8(acval)
-		case int64:
-			v.Enable = uint8(acval)
-		case uint:
-			v.Enable = uint8(acval)
-		case uint8:
-			v.Enable = uint8(acval)
 		}
 	}
 	if val, ok = m["recharge_amount"]; ok {
 		switch acval := val.(type) {
-		case uint:
-			v.RechargeAmount = int64(acval)
-		case uint8:
-			v.RechargeAmount = int64(acval)
-		case uint32:
-			v.RechargeAmount = int64(acval)
 		case string:
 			if len(acval) == 0 {
 				v.RechargeAmount = 0
@@ -1595,49 +1589,49 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.RechargeAmount = int64(pvv)
 			}
+		case float64:
+			v.RechargeAmount = int64(acval)
 		case int8:
+			v.RechargeAmount = int64(acval)
+		case int64:
+			v.RechargeAmount = int64(acval)
+		case uint16:
+			v.RechargeAmount = int64(acval)
+		case uint32:
+			v.RechargeAmount = int64(acval)
+		case uint8:
+			v.RechargeAmount = int64(acval)
+		case uint64:
+			v.RechargeAmount = int64(acval)
+		case float32:
+			v.RechargeAmount = int64(acval)
+		case int:
 			v.RechargeAmount = int64(acval)
 		case int16:
 			v.RechargeAmount = int64(acval)
 		case int32:
 			v.RechargeAmount = int64(acval)
-		case int64:
-			v.RechargeAmount = int64(acval)
-		case float32:
-			v.RechargeAmount = int64(acval)
-		case float64:
-			v.RechargeAmount = int64(acval)
-		case int:
-			v.RechargeAmount = int64(acval)
-		case uint16:
-			v.RechargeAmount = int64(acval)
-		case uint64:
+		case uint:
 			v.RechargeAmount = int64(acval)
 		}
 	}
 	if val, ok = m["withdraw_amount"]; ok {
 		switch acval := val.(type) {
-		case int:
+		case int16:
 			v.WithdrawAmount = int64(acval)
 		case int32:
-			v.WithdrawAmount = int64(acval)
-		case int64:
-			v.WithdrawAmount = int64(acval)
-		case uint16:
-			v.WithdrawAmount = int64(acval)
-		case uint32:
-			v.WithdrawAmount = int64(acval)
-		case float64:
-			v.WithdrawAmount = int64(acval)
-		case int8:
-			v.WithdrawAmount = int64(acval)
-		case int16:
 			v.WithdrawAmount = int64(acval)
 		case uint:
 			v.WithdrawAmount = int64(acval)
 		case uint8:
 			v.WithdrawAmount = int64(acval)
+		case uint32:
+			v.WithdrawAmount = int64(acval)
 		case uint64:
+			v.WithdrawAmount = int64(acval)
+		case int:
+			v.WithdrawAmount = int64(acval)
+		case int8:
 			v.WithdrawAmount = int64(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1651,33 +1645,39 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 		case float32:
 			v.WithdrawAmount = int64(acval)
+		case float64:
+			v.WithdrawAmount = int64(acval)
+		case int64:
+			v.WithdrawAmount = int64(acval)
+		case uint16:
+			v.WithdrawAmount = int64(acval)
 		}
 	}
 	if val, ok = m["available_coins"]; ok {
 		switch acval := val.(type) {
 		case int32:
 			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case int64:
-			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case uint8:
-			v.AvailableCoins = decimal.NewFromInt(int64(acval))
 		case uint16:
-			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case uint64:
-			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case int:
-			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case int16:
-			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case uint:
 			v.AvailableCoins = decimal.NewFromInt(int64(acval))
 		case uint32:
 			v.AvailableCoins = decimal.NewFromInt(int64(acval))
+		case int:
+			v.AvailableCoins = decimal.NewFromInt(int64(acval))
 		case int8:
 			v.AvailableCoins = decimal.NewFromInt(int64(acval))
-		case float64:
-			v.AvailableCoins = decimal.NewFromFloat(float64(acval))
+		case int16:
+			v.AvailableCoins = decimal.NewFromInt(int64(acval))
+		case uint64:
+			v.AvailableCoins = decimal.NewFromInt(int64(acval))
+		case int64:
+			v.AvailableCoins = decimal.NewFromInt(int64(acval))
+		case uint:
+			v.AvailableCoins = decimal.NewFromInt(int64(acval))
+		case uint8:
+			v.AvailableCoins = decimal.NewFromInt(int64(acval))
 		case float32:
+			v.AvailableCoins = decimal.NewFromFloat(float64(acval))
+		case float64:
 			v.AvailableCoins = decimal.NewFromFloat(float64(acval))
 		case string:
 			var err error
@@ -1689,25 +1689,23 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["s_player"]; ok {
 		switch acval := val.(type) {
-		case int:
+		case int64:
 			v.SPlayer = uint8(acval)
-		case int8:
-			v.SPlayer = uint8(acval)
-		case int32:
+		case uint:
 			v.SPlayer = uint8(acval)
 		case uint8:
 			v.SPlayer = uint8(acval)
 		case uint16:
 			v.SPlayer = uint8(acval)
-		case uint32:
+		case int:
 			v.SPlayer = uint8(acval)
-		case uint64:
+		case int8:
 			v.SPlayer = uint8(acval)
 		case int16:
 			v.SPlayer = uint8(acval)
-		case int64:
+		case int32:
 			v.SPlayer = uint8(acval)
-		case uint:
+		case uint64:
 			v.SPlayer = uint8(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1719,17 +1717,19 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.SPlayer = uint8(pvv)
 			}
-		case float32:
-			v.SPlayer = uint8(acval)
 		case float64:
+			v.SPlayer = uint8(acval)
+		case uint32:
+			v.SPlayer = uint8(acval)
+		case float32:
 			v.SPlayer = uint8(acval)
 		}
 	}
 	if val, ok = m["c_player"]; ok {
 		switch acval := val.(type) {
-		case uint8:
-			v.CPlayer = uint8(acval)
 		case uint32:
+			v.CPlayer = uint8(acval)
+		case uint64:
 			v.CPlayer = uint8(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1741,25 +1741,25 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.CPlayer = uint8(pvv)
 			}
-		case float64:
-			v.CPlayer = uint8(acval)
-		case int8:
+		case int:
 			v.CPlayer = uint8(acval)
 		case int16:
 			v.CPlayer = uint8(acval)
+		case int64:
+			v.CPlayer = uint8(acval)
 		case uint:
 			v.CPlayer = uint8(acval)
-		case uint16:
-			v.CPlayer = uint8(acval)
-		case uint64:
+		case uint8:
 			v.CPlayer = uint8(acval)
 		case float32:
 			v.CPlayer = uint8(acval)
-		case int:
+		case int8:
 			v.CPlayer = uint8(acval)
 		case int32:
 			v.CPlayer = uint8(acval)
-		case int64:
+		case uint16:
+			v.CPlayer = uint8(acval)
+		case float64:
 			v.CPlayer = uint8(acval)
 		}
 	}
@@ -1767,9 +1767,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		switch acval := val.(type) {
 		case uint64:
 			v.WithdrawModel = int(acval)
-		case float64:
-			v.WithdrawModel = int(acval)
-		case int8:
+		case int:
 			v.WithdrawModel = int(acval)
 		case int32:
 			v.WithdrawModel = int(acval)
@@ -1777,17 +1775,17 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.WithdrawModel = int(acval)
 		case uint:
 			v.WithdrawModel = int(acval)
-		case uint16:
-			v.WithdrawModel = int(acval)
-		case float32:
-			v.WithdrawModel = int(acval)
-		case int:
-			v.WithdrawModel = int(acval)
-		case int16:
-			v.WithdrawModel = int(acval)
 		case uint8:
 			v.WithdrawModel = int(acval)
+		case uint16:
+			v.WithdrawModel = int(acval)
 		case uint32:
+			v.WithdrawModel = int(acval)
+		case float64:
+			v.WithdrawModel = int(acval)
+		case int8:
+			v.WithdrawModel = int(acval)
+		case int16:
 			v.WithdrawModel = int(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1799,25 +1797,23 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.WithdrawModel = int(pvv)
 			}
+		case float32:
+			v.WithdrawModel = int(acval)
 		}
 	}
 	if val, ok = m["withdraw_control"]; ok {
 		switch acval := val.(type) {
-		case int64:
-			v.WithdrawControl = int(acval)
-		case uint:
+		case int32:
 			v.WithdrawControl = int(acval)
 		case uint16:
 			v.WithdrawControl = int(acval)
 		case uint32:
 			v.WithdrawControl = int(acval)
+		case float64:
+			v.WithdrawControl = int(acval)
+		case uint8:
+			v.WithdrawControl = int(acval)
 		case uint64:
-			v.WithdrawControl = int(acval)
-		case int:
-			v.WithdrawControl = int(acval)
-		case int8:
-			v.WithdrawControl = int(acval)
-		case int32:
 			v.WithdrawControl = int(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1829,11 +1825,15 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.WithdrawControl = int(pvv)
 			}
-		case float64:
+		case int:
+			v.WithdrawControl = int(acval)
+		case int8:
 			v.WithdrawControl = int(acval)
 		case int16:
 			v.WithdrawControl = int(acval)
-		case uint8:
+		case int64:
+			v.WithdrawControl = int(acval)
+		case uint:
 			v.WithdrawControl = int(acval)
 		case float32:
 			v.WithdrawControl = int(acval)
@@ -1841,9 +1841,11 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["total_rounds"]; ok {
 		switch acval := val.(type) {
-		case uint16:
+		case int16:
 			v.TotalRounds = int(acval)
-		case uint32:
+		case uint:
+			v.TotalRounds = int(acval)
+		case uint8:
 			v.TotalRounds = int(acval)
 		case uint64:
 			v.TotalRounds = int(acval)
@@ -1857,23 +1859,21 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.TotalRounds = int(pvv)
 			}
-		case int64:
+		case float32:
+			v.TotalRounds = int(acval)
+		case int:
 			v.TotalRounds = int(acval)
 		case int8:
 			v.TotalRounds = int(acval)
-		case int16:
+		case float64:
+			v.TotalRounds = int(acval)
+		case uint16:
+			v.TotalRounds = int(acval)
+		case uint32:
 			v.TotalRounds = int(acval)
 		case int32:
 			v.TotalRounds = int(acval)
-		case uint:
-			v.TotalRounds = int(acval)
-		case uint8:
-			v.TotalRounds = int(acval)
-		case float32:
-			v.TotalRounds = int(acval)
-		case float64:
-			v.TotalRounds = int(acval)
-		case int:
+		case int64:
 			v.TotalRounds = int(acval)
 		}
 	}
@@ -1885,11 +1885,13 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["level"]; ok {
 		switch acval := val.(type) {
+		case uint:
+			v.Level = int(acval)
 		case uint8:
 			v.Level = int(acval)
 		case uint16:
 			v.Level = int(acval)
-		case uint32:
+		case uint64:
 			v.Level = int(acval)
 		case string:
 			if len(acval) == 0 {
@@ -1901,49 +1903,43 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.Level = int(pvv)
 			}
-		case int:
-			v.Level = int(acval)
 		case int8:
 			v.Level = int(acval)
 		case int16:
 			v.Level = int(acval)
-		case uint:
+		case int32:
 			v.Level = int(acval)
 		case float32:
 			v.Level = int(acval)
 		case float64:
 			v.Level = int(acval)
-		case int32:
+		case int:
 			v.Level = int(acval)
 		case int64:
 			v.Level = int(acval)
-		case uint64:
+		case uint32:
 			v.Level = int(acval)
 		}
 	}
 	if val, ok = m["level_max"]; ok {
 		switch acval := val.(type) {
-		case int:
-			v.LevelMax = int(acval)
-		case int8:
-			v.LevelMax = int(acval)
 		case int16:
 			v.LevelMax = int(acval)
 		case int32:
 			v.LevelMax = int(acval)
-		case uint32:
-			v.LevelMax = int(acval)
-		case float32:
-			v.LevelMax = int(acval)
-		case float64:
-			v.LevelMax = int(acval)
 		case int64:
-			v.LevelMax = int(acval)
-		case uint:
 			v.LevelMax = int(acval)
 		case uint8:
 			v.LevelMax = int(acval)
 		case uint16:
+			v.LevelMax = int(acval)
+		case int:
+			v.LevelMax = int(acval)
+		case int8:
+			v.LevelMax = int(acval)
+		case uint:
+			v.LevelMax = int(acval)
+		case uint32:
 			v.LevelMax = int(acval)
 		case uint64:
 			v.LevelMax = int(acval)
@@ -1957,25 +1953,23 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.LevelMax = int(pvv)
 			}
+		case float32:
+			v.LevelMax = int(acval)
+		case float64:
+			v.LevelMax = int(acval)
 		}
 	}
 	if val, ok = m["score"]; ok {
 		switch acval := val.(type) {
-		case int32:
+		case int16:
+			v.Score = int(acval)
+		case uint:
+			v.Score = int(acval)
+		case uint16:
 			v.Score = int(acval)
 		case int64:
 			v.Score = int(acval)
 		case uint8:
-			v.Score = int(acval)
-		case uint16:
-			v.Score = int(acval)
-		case float32:
-			v.Score = int(acval)
-		case float64:
-			v.Score = int(acval)
-		case int8:
-			v.Score = int(acval)
-		case int16:
 			v.Score = int(acval)
 		case uint32:
 			v.Score = int(acval)
@@ -1993,35 +1987,23 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 		case int:
 			v.Score = int(acval)
-		case uint:
+		case int8:
+			v.Score = int(acval)
+		case int32:
+			v.Score = int(acval)
+		case float32:
+			v.Score = int(acval)
+		case float64:
 			v.Score = int(acval)
 		}
 	}
 	if val, ok = m["created_at"]; ok {
 		switch acval := val.(type) {
-		case int64:
-			v.CreatedAt = int(acval)
-		case uint:
-			v.CreatedAt = int(acval)
-		case float32:
-			v.CreatedAt = int(acval)
-		case float64:
+		case uint8:
 			v.CreatedAt = int(acval)
 		case uint32:
 			v.CreatedAt = int(acval)
 		case uint64:
-			v.CreatedAt = int(acval)
-		case int:
-			v.CreatedAt = int(acval)
-		case int8:
-			v.CreatedAt = int(acval)
-		case int16:
-			v.CreatedAt = int(acval)
-		case int32:
-			v.CreatedAt = int(acval)
-		case uint8:
-			v.CreatedAt = int(acval)
-		case uint16:
 			v.CreatedAt = int(acval)
 		case string:
 			if len(acval) == 0 {
@@ -2033,16 +2015,28 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.CreatedAt = int(pvv)
 			}
+		case int8:
+			v.CreatedAt = int(acval)
+		case int16:
+			v.CreatedAt = int(acval)
+		case int32:
+			v.CreatedAt = int(acval)
+		case uint:
+			v.CreatedAt = int(acval)
+		case float64:
+			v.CreatedAt = int(acval)
+		case int:
+			v.CreatedAt = int(acval)
+		case int64:
+			v.CreatedAt = int(acval)
+		case uint16:
+			v.CreatedAt = int(acval)
+		case float32:
+			v.CreatedAt = int(acval)
 		}
 	}
 	if val, ok = m["status"]; ok {
 		switch acval := val.(type) {
-		case uint8:
-			v.Status = int8(acval)
-		case uint64:
-			v.Status = int8(acval)
-		case int8:
-			v.Status = int8(acval)
 		case int32:
 			v.Status = int8(acval)
 		case int64:
@@ -2050,6 +2044,12 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		case uint:
 			v.Status = int8(acval)
 		case uint16:
+			v.Status = int8(acval)
+		case uint64:
+			v.Status = int8(acval)
+		case int:
+			v.Status = int8(acval)
+		case int8:
 			v.Status = int8(acval)
 		case uint32:
 			v.Status = int8(acval)
@@ -2065,19 +2065,21 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 		case float32:
 			v.Status = int8(acval)
-		case int:
+		case float64:
 			v.Status = int8(acval)
 		case int16:
 			v.Status = int8(acval)
-		case float64:
+		case uint8:
 			v.Status = int8(acval)
 		}
 	}
 	if val, ok = m["last_login_channel"]; ok {
 		switch acval := val.(type) {
+		case uint:
+			v.LastLoginChannel = strconv.FormatUint(uint64(acval), 10)
 		case uint8:
 			v.LastLoginChannel = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
+		case uint32:
 			v.LastLoginChannel = strconv.FormatUint(uint64(acval), 10)
 		case uint64:
 			v.LastLoginChannel = strconv.FormatUint(uint64(acval), 10)
@@ -2085,30 +2087,40 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.LastLoginChannel = acval
 		case int:
 			v.LastLoginChannel = strconv.FormatInt(int64(acval), 10)
-		case int8:
-			v.LastLoginChannel = strconv.FormatInt(int64(acval), 10)
-		case uint:
-			v.LastLoginChannel = strconv.FormatUint(uint64(acval), 10)
-		case float64:
-			v.LastLoginChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case float32:
-			v.LastLoginChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		case int16:
 			v.LastLoginChannel = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.LastLoginChannel = strconv.FormatInt(int64(acval), 10)
+		case float64:
+			v.LastLoginChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case float32:
+			v.LastLoginChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int8:
+			v.LastLoginChannel = strconv.FormatInt(int64(acval), 10)
 		case int64:
 			v.LastLoginChannel = strconv.FormatInt(int64(acval), 10)
-		case uint32:
+		case uint16:
 			v.LastLoginChannel = strconv.FormatUint(uint64(acval), 10)
 		}
 	}
 	if val, ok = m["app_channel"]; ok {
 		switch acval := val.(type) {
+		case int8:
+			v.AppChannel = strconv.FormatInt(int64(acval), 10)
+		case uint16:
+			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
+		case uint32:
+			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
 		case float64:
 			v.AppChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case string:
-			v.AppChannel = acval
+		case float32:
+			v.AppChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
+		case int:
+			v.AppChannel = strconv.FormatInt(int64(acval), 10)
+		case int16:
+			v.AppChannel = strconv.FormatInt(int64(acval), 10)
 		case int32:
 			v.AppChannel = strconv.FormatInt(int64(acval), 10)
 		case int64:
@@ -2117,24 +2129,12 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
 		case uint8:
 			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
-		case uint16:
-			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
-		case float32:
-			v.AppChannel = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case int:
-			v.AppChannel = strconv.FormatInt(int64(acval), 10)
-		case int8:
-			v.AppChannel = strconv.FormatInt(int64(acval), 10)
-		case int16:
-			v.AppChannel = strconv.FormatInt(int64(acval), 10)
-		case uint32:
-			v.AppChannel = strconv.FormatUint(uint64(acval), 10)
+		case string:
+			v.AppChannel = acval
 		}
 	}
 	if val, ok = m["pay_account"]; ok {
-		if m1, ok := val.(map[string]interface{}); ok {
+		if m1, ok := val.(map[string]interface{}); ok && len(m1) > 0 {
 			var i interface{} = &PayAccount{}
 			if b, ok := i.(easy_facade.EasyMapInter); ok {
 				if err := b.UnMarshalMapInterface(m1); err != nil {
@@ -2142,7 +2142,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.PayAccount = *i.(*PayAccount)
 			}
-		} else if m2, ok := val.(map[string]string); ok {
+		} else if m2, ok := val.(map[string]string); ok && len(m1) > 0 {
 			var i interface{} = &PayAccount{}
 			if b, ok := i.(easy_facade.EasyMapString); ok {
 				if err := b.UnMarshalMap(m2); err != nil {
@@ -2159,6 +2159,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			for i, k := range acval {
 				switch trueK := k.(type) {
 				case map[string]string:
+					if len(trueK) == 0 {
+						break
+					}
 					var kjj interface{} = &PayAccount{}
 					if b, ok := kjj.(easy_facade.EasyMapString); ok {
 						if err := b.UnMarshalMap(trueK); err != nil {
@@ -2167,6 +2170,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 						v.PayAccountArr[i] = *kjj.(*PayAccount)
 					}
 				case map[string]interface{}:
+					if len(trueK) == 0 {
+						break
+					}
 					var kjj interface{} = &PayAccount{}
 					if b, ok := kjj.(easy_facade.EasyMapInter); ok {
 						if err := b.UnMarshalMapInterface(trueK); err != nil {
@@ -2179,6 +2185,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		case []map[string]string:
 			v.PayAccountArr = make([]PayAccount, len(acval))
 			for i, k := range acval {
+				if len(k) == 0 {
+					continue
+				}
 				var kjj interface{} = &PayAccount{}
 				if b, ok := kjj.(easy_facade.EasyMapString); ok {
 					if err := b.UnMarshalMap(k); err != nil {
@@ -2190,6 +2199,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		case []map[string]interface{}:
 			v.PayAccountArr = make([]PayAccount, len(acval))
 			for i, k := range acval {
+				if len(k) == 0 {
+					continue
+				}
 				var kjj interface{} = &PayAccount{}
 				if b, ok := kjj.(easy_facade.EasyMapInter); ok {
 					if err := b.UnMarshalMapInterface(k); err != nil {
@@ -2207,6 +2219,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			for i, k := range acval {
 				switch trueK := k.(type) {
 				case map[string]string:
+					if len(trueK) == 0 {
+						break
+					}
 					var kjj interface{} = &PayAccount{}
 					if b, ok := kjj.(easy_facade.EasyMapString); ok {
 						if err := b.UnMarshalMap(trueK); err != nil {
@@ -2215,6 +2230,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 						v.PayAccountPtrArr[i] = kjj.(*PayAccount)
 					}
 				case map[string]interface{}:
+					if len(trueK) == 0 {
+						break
+					}
 					var kjj interface{} = &PayAccount{}
 					if b, ok := kjj.(easy_facade.EasyMapInter); ok {
 						if err := b.UnMarshalMapInterface(trueK); err != nil {
@@ -2227,6 +2245,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		case []map[string]string:
 			v.PayAccountPtrArr = make([]*PayAccount, len(acval))
 			for i, k := range acval {
+				if len(k) == 0 {
+					continue
+				}
 				var kjj interface{} = &PayAccount{}
 				if b, ok := kjj.(easy_facade.EasyMapString); ok {
 					if err := b.UnMarshalMap(k); err != nil {
@@ -2238,6 +2259,9 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		case []map[string]interface{}:
 			v.PayAccountPtrArr = make([]*PayAccount, len(acval))
 			for i, k := range acval {
+				if len(k) == 0 {
+					continue
+				}
 				var kjj interface{} = &PayAccount{}
 				if b, ok := kjj.(easy_facade.EasyMapInter); ok {
 					if err := b.UnMarshalMapInterface(k); err != nil {
@@ -2250,27 +2274,13 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["float_arr"]; ok {
 		switch acval := val.(type) {
-		case []float64:
-			v.FloatArr = acval
-		case []int8:
+		case []float32:
 			tmpArr := make([]float64, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
-		case []uint64:
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []int32:
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []uint:
+		case []uint8:
 			tmpArr := make([]float64, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = float64(k)
@@ -2282,14 +2292,28 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
-		case []string:
+		case []uint64:
 			tmpArr := make([]float64, len(acval))
 			for i, k := range acval {
-				tmp, err := strconv.ParseFloat(k, 10)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = float64(tmp)
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
+		case []int:
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
+		case []int32:
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
+		case []int64:
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
 		case []interface{}:
@@ -2331,31 +2355,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FloatArr = tmpArr
-		case []float32:
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []int:
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []int16:
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []int64:
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []uint8:
+		case []uint:
 			tmpArr := make([]float64, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = float64(k)
@@ -2367,17 +2367,41 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
+		case []string:
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseFloat(k, 10)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = float64(tmp)
+			}
+			v.FloatArr = tmpArr
+		case []float64:
+			v.FloatArr = acval
+		case []int8:
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
+		case []int16:
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
 		}
 	}
 	if val, ok = m["string_arr"]; ok {
 		switch acval := val.(type) {
-		case []uint32:
+		case []uint8:
 			tmpArr := make([]string, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
 			}
 			v.StringArr = tmpArr
-		case []uint64:
+		case []uint16:
 			tmpArr := make([]string, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
@@ -2391,13 +2415,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
 			}
 			v.StringArr = tmpArr
-		case []int32:
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []int64:
+		case []int16:
 			tmpArr := make([]string, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
@@ -2409,31 +2427,13 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
 			}
 			v.StringArr = tmpArr
-		case []uint8:
+		case []uint32:
 			tmpArr := make([]string, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
 			}
 			v.StringArr = tmpArr
-		case []float64:
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
-			}
-			v.StringArr = tmpArr
-		case []int:
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []int16:
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []uint16:
+		case []uint64:
 			tmpArr := make([]string, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
@@ -2474,25 +2474,35 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.StringArr = tmpArr
+		case []float64:
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
+			}
+			v.StringArr = tmpArr
+		case []int:
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []int32:
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []int64:
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
 		}
 	}
 	if val, ok = m["int_arr"]; ok {
 		switch acval := val.(type) {
 		case []uint:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []int16:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []int32:
-			v.IntArr = acval
-		case []uint8:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -2537,13 +2547,31 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.IntArr = tmpArr
+		case []float32:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
 		case []int:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
 			}
 			v.IntArr = tmpArr
+		case []int64:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
 		case []uint16:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []uint64:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -2559,37 +2587,33 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int32(tmp)
 			}
 			v.IntArr = tmpArr
-		case []float32:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
 		case []int8:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
 			}
 			v.IntArr = tmpArr
-		case []int64:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
+		case []int32:
+			v.IntArr = acval
 		case []uint32:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
 			}
 			v.IntArr = tmpArr
-		case []uint64:
+		case []float64:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
 			}
 			v.IntArr = tmpArr
-		case []float64:
+		case []int16:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []uint8:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -2611,7 +2635,15 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []uint16:
+		case []uint8:
+			v.UIntArr = acval
+		case []int:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []uint64:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
@@ -2623,13 +2655,19 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []uint32:
+		case []int8:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []float32:
+		case []int32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []int64:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
@@ -2643,6 +2681,18 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 					return err
 				}
 				tmpArr[i] = uint8(tmp)
+			}
+			v.UIntArr = tmpArr
+		case []uint16:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []uint32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
 		case []interface{}:
@@ -2684,42 +2734,16 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.UIntArr = tmpArr
-		case []int:
+		case []float32:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []int8:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []int64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []uint64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []int32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []uint8:
-			v.UIntArr = acval
 		}
 	}
 	if val, ok = m["connection"]; ok {
-		if m1, ok := val.(map[string]interface{}); ok {
+		if m1, ok := val.(map[string]interface{}); ok && len(m1) > 0 {
 			var i interface{} = &Connection{}
 			if b, ok := i.(easy_facade.EasyMapInter); ok {
 				if err := b.UnMarshalMapInterface(m1); err != nil {
@@ -2727,7 +2751,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.Connection = *i.(*Connection)
 			}
-		} else if m2, ok := val.(map[string]string); ok {
+		} else if m2, ok := val.(map[string]string); ok && len(m1) > 0 {
 			var i interface{} = &Connection{}
 			if b, ok := i.(easy_facade.EasyMapString); ok {
 				if err := b.UnMarshalMap(m2); err != nil {
@@ -2741,15 +2765,11 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 		switch acval := val.(type) {
 		case uint16:
 			v.PlayerID = int64(acval)
-		case uint32:
-			v.PlayerID = int64(acval)
-		case float32:
-			v.PlayerID = int64(acval)
 		case int:
 			v.PlayerID = int64(acval)
-		case int8:
+		case int32:
 			v.PlayerID = int64(acval)
-		case int16:
+		case uint:
 			v.PlayerID = int64(acval)
 		case uint8:
 			v.PlayerID = int64(acval)
@@ -2765,42 +2785,46 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				v.PlayerID = int64(pvv)
 			}
+		case float32:
+			v.PlayerID = int64(acval)
 		case float64:
 			v.PlayerID = int64(acval)
-		case int32:
+		case int8:
+			v.PlayerID = int64(acval)
+		case int16:
 			v.PlayerID = int64(acval)
 		case int64:
 			v.PlayerID = int64(acval)
-		case uint:
+		case uint32:
 			v.PlayerID = int64(acval)
 		}
 	}
 	if val, ok = m["token"]; ok {
 		switch acval := val.(type) {
-		case uint8:
-			v.Token = strconv.FormatUint(uint64(acval), 10)
-		case uint64:
-			v.Token = strconv.FormatUint(uint64(acval), 10)
-		case int32:
-			v.Token = strconv.FormatInt(int64(acval), 10)
-		case int64:
+		case string:
+			v.Token = acval
+		case int:
 			v.Token = strconv.FormatInt(int64(acval), 10)
 		case int8:
 			v.Token = strconv.FormatInt(int64(acval), 10)
-		case int16:
+		case int32:
 			v.Token = strconv.FormatInt(int64(acval), 10)
-		case uint:
+		case uint8:
 			v.Token = strconv.FormatUint(uint64(acval), 10)
 		case uint16:
+			v.Token = strconv.FormatUint(uint64(acval), 10)
+		case uint64:
+			v.Token = strconv.FormatUint(uint64(acval), 10)
+		case int16:
+			v.Token = strconv.FormatInt(int64(acval), 10)
+		case int64:
+			v.Token = strconv.FormatInt(int64(acval), 10)
+		case uint:
 			v.Token = strconv.FormatUint(uint64(acval), 10)
 		case uint32:
 			v.Token = strconv.FormatUint(uint64(acval), 10)
 		case float64:
 			v.Token = strconv.FormatFloat(float64(acval), 'f', -1, 64)
-		case string:
-			v.Token = acval
-		case int:
-			v.Token = strconv.FormatInt(int64(acval), 10)
 		case float32:
 			v.Token = strconv.FormatFloat(float64(acval), 'f', -1, 64)
 		}
