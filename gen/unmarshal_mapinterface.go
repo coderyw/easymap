@@ -112,12 +112,12 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 			switch v {
 			case "string":
 				g.imports[pkgStrconv] = "strconv"
-				g.imports[pkgEasymapGen] = "github.com/coderyw/easymap/gen"
 
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if len(acval)==0{ break"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t }else { pvv, err := strconv.ParseInt(acval, 10, 64)"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err != nil {return err}"))
 				if isPtr {
+					g.imports[pkgEasymapGen] = "github.com/coderyw/easymap/gen"
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = easymap_gen.BaseToPtr(%v(pvv))}", fieldName, turnStr))
 				} else {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(pvv)}", fieldName, turnStr))
@@ -146,6 +146,7 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 			switch v {
 			case "float32", "float64", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64":
 				if isPtr {
+					g.imports[pkgEasymapGen] = "github.com/coderyw/easymap/gen"
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = easymap_gen.BaseToPtr(%v(acval))", fieldName, turnStr))
 				} else {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(acval)", fieldName, turnStr))
@@ -156,6 +157,7 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t }else {pvv, err := strconv.ParseFloat(acval, 10)"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if err != nil {return err}"))
 				if isPtr {
+					g.imports[pkgEasymapGen] = "github.com/coderyw/easymap/gen"
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = easymap_gen.BaseToPtr(%v(pvv))}", fieldName, turnStr))
 				} else {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(pvv)}", fieldName, turnStr))
