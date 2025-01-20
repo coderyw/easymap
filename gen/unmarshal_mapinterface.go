@@ -32,7 +32,7 @@ func (g *generator) decodeInterStruct(r reflect.Type) error {
 			continue
 		}
 		js = g.getTag(field)
-		if js != "" {
+		if js != "" && js != "-" {
 			if out, err := g.decodeInterField(field.Name, field.Type, false, r.PkgPath()); err != nil {
 				continue
 			} else {
@@ -71,7 +71,6 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 	} else if t.Kind() == reflect.Struct && !(tp.PkgPath() == "github.com/shopspring/decimal" && tp.Name() == "Decimal") {
 		return g.decodeStructField1(fieldName, t, isPtr, pkgPath)
 	} else if t.Kind() == reflect.Array || t.Kind() == reflect.Slice {
-		//return nil, nil
 		return g.decodeArrayField(fieldName, t, isPtr, pkgPath)
 	}
 	add := ""
@@ -88,15 +87,8 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 		} else {
 			turnStr = arr[1]
 		}
+	}
 
-	}
-	kindInterArr := map[string]struct{}{
-		reflect.Int.String(): {}, reflect.Int8.String(): {}, reflect.Int16.String(): {}, reflect.Int32.String(): {}, reflect.Int64.String(): {},
-		reflect.Uint.String(): {}, reflect.Uint8.String(): {}, reflect.Uint16.String(): {}, reflect.Uint32.String(): {}, reflect.Uint64.String(): {},
-	}
-	kindFloatArr := map[string]struct{}{
-		reflect.Float32.String(): {}, reflect.Float64.String(): {},
-	}
 	kindString := map[string]struct{}{
 		reflect.String.String(): {},
 	}
@@ -110,22 +102,23 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 		if turnStr == "" {
 			turnStr = t.Kind().String()
 		}
-		kindInterArr[turnStr] = struct{}{}
-		kindInterArr["string"] = struct{}{}
-		kindInterArr["float32"] = struct{}{}
-		kindInterArr["float64"] = struct{}{}
-		for v := range kindInterArr {
+		kindInterArr := []string{
+			reflect.Int.String(), reflect.Int8.String(), reflect.Int16.String(), reflect.Int32.String(), reflect.Int64.String(),
+			reflect.Uint.String(), reflect.Uint8.String(), reflect.Uint16.String(), reflect.Uint32.String(), reflect.Uint64.String(),
+			reflect.String.String(), reflect.Float32.String(), reflect.Float64.String(),
+		}
+		for _, v := range kindInterArr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			switch v {
 			case "string":
 				g.imports[pkgStrconv] = "strconv"
+				g.imports[pkgEasymapGen] = "github.com/coderyw/easymap/gen"
 
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if len(acval)==0{ v.%v = 0", fieldName))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if len(acval)==0{ break"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t }else { pvv, err := strconv.ParseInt(acval, 10, 64)"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err != nil {return err}"))
 				if isPtr {
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\td := %v(pvv)", turnStr))
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &d", fieldName))
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = easymap_gen.BaseToPtr(%v(pvv))}", fieldName, turnStr))
 				} else {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(pvv)}", fieldName, turnStr))
 				}
@@ -143,38 +136,27 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 		if turnStr == "" {
 			turnStr = t.Kind().String()
 		}
-		kindFloatArr[turnStr] = struct{}{}
-		kindFloatArr["float32"] = struct{}{}
-		kindFloatArr["float64"] = struct{}{}
-		kindFloatArr["int"] = struct{}{}
-		kindFloatArr["int8"] = struct{}{}
-		kindFloatArr["int16"] = struct{}{}
-		kindFloatArr["int32"] = struct{}{}
-		kindFloatArr["int64"] = struct{}{}
-		kindFloatArr["uint"] = struct{}{}
-		kindFloatArr["uint8"] = struct{}{}
-		kindFloatArr["uint16"] = struct{}{}
-		kindFloatArr["uint32"] = struct{}{}
-		kindFloatArr["uint64"] = struct{}{}
-		kindFloatArr["string"] = struct{}{}
-		for v := range kindFloatArr {
+		kindFloatArr := []string{
+			reflect.Int.String(), reflect.Int8.String(), reflect.Int16.String(), reflect.Int32.String(), reflect.Int64.String(),
+			reflect.Uint.String(), reflect.Uint8.String(), reflect.Uint16.String(), reflect.Uint32.String(), reflect.Uint64.String(),
+			reflect.String.String(), reflect.Float32.String(), reflect.Float64.String(),
+		}
+		for _, v := range kindFloatArr {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			switch v {
 			case "float32", "float64", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64":
 				if isPtr {
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\t pvv := %v(acval)", turnStr))
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", fieldName))
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = easymap_gen.BaseToPtr(%v(acval))", fieldName, turnStr))
 				} else {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(acval)", fieldName, turnStr))
 				}
 			case "string":
 				g.imports[pkgStrconv] = "strconv"
-				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if len(acval)==0{ v.%v = 0", fieldName))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if len(acval)==0{ break"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t }else {pvv, err := strconv.ParseFloat(acval, 10)"))
 				fmt.Fprintln(out, fmt.Sprintf("\t\t\t if err != nil {return err}"))
 				if isPtr {
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmp:= %v(pvv)", turnStr))
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &pvv", fieldName))
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = easymap_gen.BaseToPtr(%v(pvv))}", fieldName, turnStr))
 				} else {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = %v(pvv)}", fieldName, turnStr))
 				}
@@ -186,20 +168,13 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 		if turnStr == "" {
 			turnStr = t.Kind().String()
 		}
-		kindString[turnStr] = struct{}{}
-		kindString["int"] = struct{}{}
-		kindString["int8"] = struct{}{}
-		kindString["int16"] = struct{}{}
-		kindString["int32"] = struct{}{}
-		kindString["int64"] = struct{}{}
-		kindString["uint"] = struct{}{}
-		kindString["uint8"] = struct{}{}
-		kindString["uint16"] = struct{}{}
-		kindString["uint32"] = struct{}{}
-		kindString["uint64"] = struct{}{}
-		kindString["float64"] = struct{}{}
-		kindString["float32"] = struct{}{}
-		for v := range kindString {
+		kindString := []string{
+			reflect.Int.String(), reflect.Int8.String(), reflect.Int16.String(), reflect.Int32.String(), reflect.Int64.String(),
+			reflect.Uint.String(), reflect.Uint8.String(), reflect.Uint16.String(), reflect.Uint32.String(), reflect.Uint64.String(),
+			reflect.String.String(), reflect.Float32.String(), reflect.Float64.String(),
+		}
+
+		for _, v := range kindString {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
 			switch v {
 			case "string":
@@ -254,49 +229,57 @@ func (g *generator) decodeInterField(fieldName string, t reflect.Type, isPtr boo
 	case reflect.Struct:
 		if tp.PkgPath() == "github.com/shopspring/decimal" && tp.Name() == "Decimal" {
 			g.imports[pkgDecimal] = "github.com/shopspring/decimal"
-			ab := []map[string]struct{}{
-				kindInterArr,
-				kindFloatArr,
-				kindString,
+			ab := []string{
+				reflect.Int.String(), reflect.Int8.String(), reflect.Int16.String(), reflect.Int32.String(), reflect.Int64.String(),
+				reflect.Uint.String(), reflect.Uint8.String(), reflect.Uint16.String(), reflect.Uint32.String(), reflect.Uint64.String(),
+				reflect.String.String(), reflect.Float32.String(), reflect.Float64.String(),
 			}
-			for i, v := range ab {
-				for k := range v {
-					fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", k))
-					switch i {
-					case 0:
-						if isPtr {
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromInt(int64(acval))"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
-						} else {
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromInt(int64(acval))", fieldName))
-						}
-					case 1:
-						if isPtr {
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromFloat(float64(acval))"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
-						} else {
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromFloat(float64(acval))", fieldName))
-						}
-					case 2:
-						if isPtr {
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar err error"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc,err = decimal.NewFromString(acval)"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err!= nil {"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\t\treturn err"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
-						} else {
-							fmt.Fprintln(out, fmt.Sprintf("\t\tvar err error"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v,err = decimal.NewFromString(acval)", fieldName))
-							fmt.Fprintln(out, fmt.Sprintf("\t\tif err!= nil {"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
-							fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
-						}
+			for i, k := range ab {
+				fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", k))
+
+				if i < 5 {
+					if isPtr {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromInt(int64(acval))"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
+					} else {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromInt(int64(acval))", fieldName))
+					}
+				} else if i < 10 {
+					if isPtr {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromUint64(uint64(acval))"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
+					} else {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromUint64(uint64(acval))", fieldName))
+					}
+				} else if i < 11 {
+					if isPtr {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar err error"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc,err = decimal.NewFromString(acval)"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tif err!= nil {"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\treturn err"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
+					} else {
+						fmt.Fprintln(out, fmt.Sprintf("\t\tvar err error"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\tv.%v,err = decimal.NewFromString(acval)", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\tif err!= nil {"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\treturn err"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
+					}
+
+				} else {
+					if isPtr {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tvar decc decimal.Decimal"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecc = decimal.NewFromFloat(float64(acval))"))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = &decc", fieldName))
+					} else {
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = decimal.NewFromFloat(float64(acval))", fieldName))
 					}
 				}
+
 			}
 
 		}
@@ -471,6 +454,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		kindString["[]interface{}"] = struct{}{}
 		for v := range kindString {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\tif len(acval)==0{break}"))
 			if trueKind == v {
 				if isPtr {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = &acval", fieldName))
@@ -570,6 +554,7 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		kindString["[]interface{}"] = struct{}{}
 		for v := range kindString {
 			fmt.Fprintln(out, fmt.Sprintf("\t\tcase %v:", v))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\tif len(acval)==0{break}"))
 			if trueKind == v {
 				if isPtr {
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = &acval", fieldName))
@@ -714,44 +699,47 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 			arr := []string{"float32", "float64", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "string", "interface{}"}
 			for _, k := range arr {
 				fmt.Fprintln(out, fmt.Sprintf("\t\tcase []%v:", k))
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\tif len(acval)>0{"))
+
 				if arrFieldIsPtr {
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = make([]*github_com_shopspring_decimal.Decimal, len(acval))", fieldName))
+					//fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = make([]*github_com_shopspring_decimal.Decimal, len(acval))", fieldName))
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecArr := make([]*github_com_shopspring_decimal.Decimal, len(acval))"))
 				} else {
-					fmt.Fprintln(out, fmt.Sprintf("\t\t\tv.%v = make([]github_com_shopspring_decimal.Decimal, len(acval))", fieldName))
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\tdecArr := make([]github_com_shopspring_decimal.Decimal, len(acval))"))
 				}
 				switch k {
 				case "float32", "float64":
 					fmt.Fprintln(out, "\t\t\tfor i, k := range acval {")
 					if arrFieldIsPtr {
 						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmp := github_com_shopspring_decimal.NewFromFloat(float64(k))"))
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = &tmp}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = &tmp}"))
 					} else {
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = github_com_shopspring_decimal.NewFromFloat(float64(k))}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = github_com_shopspring_decimal.NewFromFloat(float64(k))}"))
 					}
 				case "int", "int8", "int16", "int32", "int64":
 					fmt.Fprintln(out, "\t\t\tfor i, k := range acval {")
 					if arrFieldIsPtr {
 						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmp := github_com_shopspring_decimal.NewFromInt(int64(k))"))
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = &tmp}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = &tmp}"))
 					} else {
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = github_com_shopspring_decimal.NewFromInt(int64(k))}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = github_com_shopspring_decimal.NewFromInt(int64(k))}"))
 					}
 				case "uint", "uint8", "uint16", "uint32", "uint64":
 					fmt.Fprintln(out, "\t\t\tfor i, k := range acval {")
 					if arrFieldIsPtr {
 						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmp := github_com_shopspring_decimal.NewFromUint64(uint64(k))"))
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = &tmp}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = &tmp}"))
 					} else {
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = github_com_shopspring_decimal.NewFromUint64(uint64(k))}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = github_com_shopspring_decimal.NewFromUint64(uint64(k))}"))
 					}
 				case "string":
 					fmt.Fprintln(out, "\t\t\tfor i, k := range acval {")
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmp,err := github_com_shopspring_decimal.NewFromString(k)"))
 					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err != nil {\n\t\t\t\t\treturn err\n\t\t\t\t}"))
 					if arrFieldIsPtr {
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = &tmp}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = &tmp}"))
 					} else {
-						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = tmp}", fieldName))
+						fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = tmp}"))
 					}
 				case "interface{}":
 					fmt.Fprintln(out, "\t\t\tfor i, k := range acval {")
@@ -763,46 +751,56 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 
 							if arrFieldIsPtr {
 								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\ttmp := github_com_shopspring_decimal.NewFromFloat(float64(trueK))"))
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tv.%v[i] = &tmp", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tdecArr[i] = &tmp"))
 							} else {
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tv.%v[i] = github_com_shopspring_decimal.NewFromFloat(float64(trueK))", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tdecArr[i] = github_com_shopspring_decimal.NewFromFloat(float64(trueK))"))
 							}
 						case "int", "int8", "int16", "int32", "int64":
 							if arrFieldIsPtr {
 								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\ttmp := github_com_shopspring_decimal.NewFromInt(int64(trueK))"))
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tv.%v[i] = &tmp", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tdecArr[i] = &tmp"))
 							} else {
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tv.%v[i] = github_com_shopspring_decimal.NewFromInt(int64(trueK))", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tdecArr[i] = github_com_shopspring_decimal.NewFromInt(int64(trueK))"))
 							}
 						case "uint", "uint8", "uint16", "uint32", "uint64":
 							if arrFieldIsPtr {
 								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\ttmp := github_com_shopspring_decimal.NewFromUint64(uint64(trueK))"))
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tv.%v[i] = &tmp", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tdecArr[i] = &tmp"))
 							} else {
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tv.%v[i] = github_com_shopspring_decimal.NewFromUint64(uint64(trueK))", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tdecArr[i] = github_com_shopspring_decimal.NewFromUint64(uint64(trueK))"))
 							}
 						case "string":
 							fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmp,err := github_com_shopspring_decimal.NewFromString(trueK)"))
 							fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err != nil {\n\t\t\t\t\treturn err\n\t\t\t\t}"))
 							if arrFieldIsPtr {
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = &tmp", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = &tmp"))
 							} else {
-								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v[i] = tmp", fieldName))
+								fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tdecArr[i] = tmp"))
 							}
 						}
 					}
 					fmt.Fprintln(out, "\t\t\t\t}")
 					fmt.Fprintln(out, "\t\t\t}")
 				}
+				if isPtr {
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &decArr", fieldName))
+				} else {
+					fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = decArr", fieldName))
+				}
+				fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
+
 			}
 
 			break
 		}
+
+		// ----- []interface{}
 		fmt.Fprintln(out, fmt.Sprintf("		case []interface{}:"))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tif len(acval)==0{break}"))
 		if arrFieldIsPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]*%v, len(acval))", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t tmpArr := make([]*%v, len(acval))", name))
 		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]%v, len(acval))", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t tmpArr := make([]%v, len(acval))", name))
 		}
 		fmt.Fprintln(out, fmt.Sprintf("			for i, k := range acval {"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tswitch trueK := k.(type) {"))
@@ -815,9 +813,9 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\t}"))
 		if arrFieldIsPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\tv.%v[i] = kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\ttmpArr[i] = kjj.(*%v)}", name))
 		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\tv.%v[i] = *kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\ttmpArr[i] = *kjj.(*%v)}", name))
 		}
 
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tcase map[string]interface{}:"))
@@ -828,50 +826,120 @@ func (g *generator) decodeArrayField(fieldName string, t reflect.Type, isPtr boo
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\t\treturn err"))
 		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\t}"))
 		if arrFieldIsPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\tv.%v[i] = kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\ttmpArr[i] = kjj.(*%v)}", name))
 		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\tv.%v[i] = *kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t\ttmpArr[i] = *kjj.(*%v)}", name))
+		}
+
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tcase %v:", name))
+		if arrFieldIsPtr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmpArr[i] = &trueK"))
+		} else {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmpArr[i] = trueK"))
+		}
+
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tcase *%v:", name))
+		if arrFieldIsPtr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmpArr[i] = trueK"))
+		} else {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\ttmpArr[i] = *trueK"))
 		}
 
 		fmt.Fprintln(out, "\t\t\t\t}")
 		fmt.Fprintln(out, "\t\t\t}")
+		if isPtr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = &tmpArr", fieldName))
+		} else {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v = tmpArr", fieldName))
+		}
 
 		fmt.Fprintln(out, fmt.Sprintf("\t\tcase []map[string]string:"))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tif len(acval)==0{break}"))
 		if !arrFieldIsPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]%v, len(acval))", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t tmpArr := make([]%v, len(acval))", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapString); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMap(k); err != nil { return err }}"))
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t v.%v[i] = *kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t tmpArr[i] = *kjj.(*%v)}", name))
 		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]*%v, len(acval))", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t tmpArr := make([]*%v, len(acval))", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapString); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMap(k); err != nil { return err }}"))
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t v.%v[i] = kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t tmpArr[i] = kjj.(*%v)}", name))
 		}
+		if isPtr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = &tmpArr", fieldName))
+		} else {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = tmpArr", fieldName))
+		}
+
 		fmt.Fprintln(out, fmt.Sprintf("\t\tcase []map[string]interface{}:"))
+		fmt.Fprintln(out, fmt.Sprintf("\t\t\tif len(acval)==0{break}"))
 		if !arrFieldIsPtr {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]%v, len(acval))", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t tmpArr := make([]%v, len(acval))", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapInter); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMapInterface(k); err != nil { return err }}"))
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t v.%v[i] = *kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t tmpArr[i] = *kjj.(*%v)}", name))
 		} else {
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = make([]*%v, len(acval))", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t tmpArr := make([]*%v, len(acval))", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t for i, k := range acval {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\tif len(k)==0{continue}"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t var kjj interface{} = &%v{}", name))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t if b, ok := kjj.(easy_facade.EasyMapInter); ok {"))
 			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\t if err := b.UnMarshalMapInterface(k); err != nil { return err }}"))
-			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t v.%v[i] = kjj.(*%v)}", fieldName, name))
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t tmpArr[i] = kjj.(*%v)}", name))
 		}
+		if isPtr {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = &tmpArr", fieldName))
+		} else {
+			fmt.Fprintln(out, fmt.Sprintf("\t\t\t v.%v = tmpArr", fieldName))
+		}
+
+		var arrField, arrFieldAt string
+		if arrFieldIsPtr {
+			arrField = fmt.Sprintf("*%v", name)
+			arrFieldAt = "&"
+		} else {
+			arrField = name
+		}
+		var fieldPtr string
+		if isPtr {
+			fieldPtr = "&"
+		}
+
+		fmt.Fprintln(out,
+			fmt.Sprintf(`
+		case []%v:
+			if len(acval)>0 {
+				tmpArr := make([]%v, len(acval))
+				for i,k := range acval {
+					tmpArr[i] = %vk
+				}
+				v.%v = %vtmpArr
+			}`, name, arrField, arrFieldAt, fieldName, fieldPtr))
+		if !arrFieldIsPtr {
+			arrFieldAt = "*"
+		} else {
+			arrFieldAt = ""
+		}
+		fmt.Fprintln(out,
+			fmt.Sprintf(`
+		case []*%v:
+			if len(acval)>0 {
+				tmpArr := make([]%v, len(acval))
+				for i,k := range acval {
+					tmpArr[i] = %vk
+				}
+				v.%v = %vtmpArr
+			}`, name, arrField, arrFieldAt, fieldName, fieldPtr))
 	}
 	fmt.Fprintln(out, fmt.Sprintf("\t\t }"))
 	return out, nil

@@ -19,6 +19,7 @@ const pkgStrconv = "strconv"
 const pkgUnsafe = "unsafe"
 const pkgFacade = "easy_facade"
 const pkgDecimal = "decimal"
+const pkgEasymapGen = "easymap_gen"
 
 type generator struct {
 	pkgName       string

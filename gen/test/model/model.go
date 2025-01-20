@@ -39,6 +39,7 @@ type EasyMAP_exporter_fs *fs
 type EasyMAP_exporter_OutModel *OutModel
 type EasyMAP_exporter_Struct2 *Struct2
 type EasyMAP_exporter_Resp360 *Resp360
+type EasyMAP_exporter_InModel *InModel
 type EasyMAP_exporter_ConfigureAliCdnDomainReq *ConfigureAliCdnDomainReq
 type EasyMAP_exporter_OnlyInterface *OnlyInterface
 type EasyMAP_exporter_ErrorStruct *ErrorStruct
@@ -58,19 +59,65 @@ type CaMsgServiceClient struct {
 }
 
 type Resp360 struct {
-	Code    int              `json:"code"`
-	Message string           `json:"message"`
-	B       int64            `json:"b"`
-	Float   float32          `json:"float"`
-	DD      []int            `json:"DD"`
-	DDD     []*uint8         `json:"DDD"`
-	FFF     []float64        `json:"FFF"`
-	FFFF    []*float64       `json:"FFFF"`
-	SSS     []string         `json:"SSS"`
-	SSSS    []*string        `json:"SSSS"`
-	Dec     decimal.Decimal  `json:"dec"`
-	PtrDec  *decimal.Decimal `json:"ptrDec"`
-	Data    []struct {
+	FieldInt          int     `json:"fieldInt"`
+	FieldIntPtr       *int    `json:"FieldIntPtr"`
+	FieldIntArr       []int   `json:"fieldIntArr"`
+	FieldIntArrPtr    []*int  `json:"FieldIntArrPtr"`
+	FieldIntPtrArr    *[]int  `json:"FieldIntPtrArr"`
+	FieldIntPtrArrPtr *[]*int `json:"FieldIntPtrArrPtr"`
+
+	FieldUint8          uint8     `json:"fieldUint8"`
+	FieldUint8Ptr       *uint8    `json:"fieldUint8Ptr"`
+	FieldUint8Arr       []uint8   `json:"fieldUint8Arr"`
+	FieldUint8ArrPtr    []*uint8  `json:"fieldUint8ArrPtr"`
+	FieldUint8PtrArr    *[]uint8  `json:"fieldUint8PtrArr"`
+	FieldUint8PtrArrPtr *[]*uint8 `json:"fieldUint8PtrArrPtr"`
+
+	FieldFloat32          float32     `json:"fieldFloat32"`
+	FieldFloat32Ptr       *float32    `json:"fieldFloat32Ptr"`
+	FieldFloat32Arr       []float32   `json:"fieldFloat32Arr"`
+	FieldFloat32ArrPtr    []*float32  `json:"fieldFloat32ArrPtr"`
+	FieldFloat32PtrArr    *[]float32  `json:"fieldFloat32PtrArr"`
+	FieldFloat32PtrArrPtr *[]*float32 `json:"fieldFloat32PtrArrPtr"`
+
+	FieldBool          bool     `json:"fieldBool"`
+	FieldBoolPtr       *bool    `json:"fieldBoolPtr"`
+	FieldBoolArr       []bool   `json:"fieldBoolArr"`
+	FieldBoolArrPtr    []*bool  `json:"fieldBoolArrPtr"`
+	FieldBoolPtrArr    *[]bool  `json:"fieldBoolPtrArr"`
+	FieldBoolPtrArrPtr *[]*bool `json:"fieldBoolPtrArrPtr"`
+
+	FieldString          string     `json:"fieldString"`
+	FieldStringPtr       *string    `json:"fieldStringPtr"`
+	FieldStringArr       []string   `json:"fieldStringArr"`
+	FieldStringArrPtr    []*string  `json:"fieldStringArrPtr"`
+	FieldStringPtrArr    *[]string  `json:"fieldStringPtrArr"`
+	FieldStringPtrArrPtr *[]*string `json:"fieldStringPtrArrPtr"`
+
+	Decimal          decimal.Decimal     `json:"decimal"`
+	DecimalPtr       *decimal.Decimal    `json:"decimalPtr"`
+	DecimalArr       []decimal.Decimal   `json:"decimalArr"`
+	DecimalPtrArr    *[]decimal.Decimal  `json:"DecimalPtrArr"`
+	DecimalArrPtr    []*decimal.Decimal  `json:"decimalArrPtr"`
+	DecimalPtrArrPtr *[]*decimal.Decimal `json:"DecimalPtrArrPtr"`
+
+	StructModel          InModel     `json:"structModel"`
+	StructModelPtr       *InModel    `json:"structModelPtr"`
+	StructModelArr       []InModel   `json:"structModelArr"`
+	StructModelArrPtr    []*InModel  `json:"structModelArrPtr"`
+	StructModelPtrArrPtr *[]*InModel `json:"structModelPtrArrPtr"`
+
+	OutModel          model1.UnEasyMap     `json:"outModel"`
+	OutModelPtr       *model1.UnEasyMap    `json:"outModelPtr"`
+	OutModelArr       []model1.UnEasyMap   `json:"outModelArr"`
+	OutModelArrPtr    []*model1.UnEasyMap  `json:"outModelArrPtr"`
+	OutModelPtrArrPtr *[]*model1.UnEasyMap `json:"OutModelPtrArrPtr"`
+
+	Inter       interface{}    `json:"inter"`
+	InterArr    []interface{}  `json:"InterArr"`
+	InterPtrArr *[]interface{} `json:"InterPtrArr"`
+
+	Data []struct {
 		MatchId        string `json:"matchId"`
 		MatchTimeStamp string `json:"matchTimeStamp"`
 		MatchDate      string `json:"matchDate"`
@@ -93,14 +140,9 @@ type Resp360 struct {
 		} `json:"liveStreams"`
 		MatchState string `json:"matchState"`
 	} `json:"data"`
-	Else          []interface{}      `json:"else"`
-	AbcArr        []Resp360Arr       `json:"abc_arr"`
-	UnEasyMapArr  []model1.UnEasyMap `json:"unEasyMapArr"`
-	DecimalArr    []decimal.Decimal  `json:"decimal_arr"`
-	DecimalArrPtr []*decimal.Decimal `json:"decimal_arr_ptr"`
 }
 
-type Resp360Arr struct {
+type InModel struct {
 	Abc string `json:"abc"`
 }
 

@@ -173,7 +173,7 @@ func (g *Generator) Run() error {
 		buildFlags := buildFlagsRegexp.FindAllString(g.GenBuildFlags, -1)
 		execArgs = append(execArgs, buildFlags...)
 	}
-	execArgs = append(execArgs, "-tags", g.BuildTags, filepath.Base(path))
+	execArgs = append(execArgs, "-mod=mod", "-tags", g.BuildTags, filepath.Base(path))
 	cmd := exec.Command("go", execArgs...)
 
 	cmd.Stdout = f

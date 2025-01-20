@@ -279,34 +279,71 @@ func (g *generator) decodeStructField1(fieldName string, t reflect.Type, isPtr b
 		name = modelName + "." + t.Name()
 		g.imports[modelName] = t.PkgPath()
 	}
+	if !isPtr {
+		fmt.Fprintln(out,
+			fmt.Sprintf(`
+		switch acval := val.(type) {
+		case map[string]interface{}:
+			if len(acval) > 0 {
+				var i interface{} = &%v{}
+				if b, ok := i.(easy_facade.EasyMapInter); ok {
+					if err := b.UnMarshalMapInterface(acval); err != nil {
+						return err
+					}
+					v.%v = *i.(*%v)
+				}
+			}
+		case map[string]string:
+			if len(acval) > 0 {
+				var i interface{} = &%v{}
+				if b, ok := i.(easy_facade.EasyMapString); ok {
+					if err := b.UnMarshalMap(acval); err != nil {
+						return err
+					}
+					v.%v = *i.(*%v)
+				}
+			}
+		case %v:
+			v.%v = acval
+		case *%v:
+			if acval == nil {
+				break
+			}
+			v.%v = *acval
+		}
 
-	fmt.Fprintln(out, fmt.Sprintf("\t\tif m1,ok:= val.(map[string]interface{}); ok && len(m1) > 0{"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=&%v{}", name))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b,ok :=i.(%v.EasyMapInter); ok  {", pkgFacade))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMapInterface(m1); err != nil {"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
-	if isPtr {
-		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v =  i.(*%v)", fieldName, name))
+`, name, fieldName, name, name, fieldName, name, name, fieldName, name, fieldName))
 	} else {
-		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v =  *i.(*%v)", fieldName, name))
+		fmt.Fprintln(out,
+			fmt.Sprintf(`
+		switch acval := val.(type) {
+		case map[string]interface{}:
+			if len(acval) > 0 {
+				var i interface{} = &%v{}
+				if b, ok := i.(easy_facade.EasyMapInter); ok {
+					if err := b.UnMarshalMapInterface(acval); err != nil {
+						return err
+					}
+					v.%v = i.(*%v)
+				}
+			}
+		case map[string]string:
+			if len(acval) > 0 {
+				var i interface{} = &%v{}
+				if b, ok := i.(easy_facade.EasyMapString); ok {
+					if err := b.UnMarshalMap(acval); err != nil {
+						return err
+					}
+					v.%v = i.(*%v)
+				}
+			}
+		case %v:
+			v.%v = &acval
+		case *%v:
+			v.%v = acval
+		}
+
+`, name, fieldName, name, name, fieldName, name, name, fieldName, name, fieldName))
 	}
-
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t}else if m2, ok := val.(map[string]string); ok && len(m1) > 0{"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\tvar i interface{}=&%v{}", name))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\tif b, ok := i.(%v.EasyMapString); ok {", pkgFacade))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tif err := b.UnMarshalMap(m2); err != nil {"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t\treturn err"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t\t}"))
-	if isPtr {
-		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v =  i.(*%v)", fieldName, name))
-	} else {
-		fmt.Fprintln(out, fmt.Sprintf("\t\t\t\tv.%v =  *i.(*%v)", fieldName, name))
-	}
-
-	fmt.Fprintln(out, fmt.Sprintf("\t\t\t}"))
-	fmt.Fprintln(out, fmt.Sprintf("\t\t}"))
-
 	return out, nil
 }

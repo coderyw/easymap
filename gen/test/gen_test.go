@@ -5,10 +5,11 @@
  * @Version: 1.0.0
  * @Date: 2022/10/29 13:59
  */
-package gen
+package test
 
 import (
 	"fmt"
+	"github.com/coderyw/easymap/gen"
 	"github.com/coderyw/easymap/gen/test/model"
 	"os"
 	"reflect"
@@ -16,18 +17,19 @@ import (
 )
 
 func TestRun(t *testing.T) {
-	g := NewGenerator("model_easymap.go")
-	g.SetPkg("model", "github.com/coderyw/easymap/test/model")
-	//g.Add(model.EasyMAP_exporter_Resp360(nil))
+	g := gen.NewGenerator("model_easymap.go")
+	g.SetPkg("model", "github.com/coderyw/gen/easymap/test/model")
+	g.Add(model.EasyMAP_exporter_Resp360(nil))
+	g.Add(model.EasyMAP_exporter_InModel(nil))
 	g.Add(model.EasyMAP_exporter_UserCache(nil))
 	g.Add(model.EasyMAP_exporter_PayAccount(nil))
 	g.Add(model.EasyMAP_exporter_Connection(nil))
 	g.Add(model.EasyMAP_exporter_UserTinyInfo(nil))
-	//g.Add(model.EasyMAP_exporter_OutModel(nil))
-	//g.Add(model.EasyMAP_exporter_caMsgServiceClient(nil))
+	g.Add(model.EasyMAP_exporter_OutModel(nil))
+	g.Add(model.EasyMAP_exporter_caMsgServiceClient(nil))
 	//g.Add(model.EasyMAP_exporter_ConfigureAliCdnDomainReq(nil))
 	//g.Add(model.EasyMAP_exporter_StreamCtlServiceServer(nil))
-	f, err := os.Create("test/model/ErrorStruct_easymap.go")
+	f, err := os.Create("model/ErrorStruct_easymap.go")
 	if err != nil {
 		panic(err)
 	}
