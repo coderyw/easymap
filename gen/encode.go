@@ -80,31 +80,51 @@ func (g *generator) encodeField(fv reflect.Type, field reflect.StructField, isPt
 	if strings.HasPrefix(field.Name, "XXX_") {
 		return
 	}
-	if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
-		g.imports["fmt"] = "fmt"
-		if isPtr {
-			fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))
-			fmt.Fprintln(g.out, fmt.Sprintf("\t\tm[\"%v\"] = *v.%v", g.getTag(field), field.Name))
-			fmt.Fprintln(g.out, fmt.Sprintf("\t}"))
-		} else {
-			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v", g.getTag(field), field.Name))
-		}
 
-	} else if fv.Kind() == reflect.Ptr {
+	if fv.Kind() == reflect.Ptr {
 		fv = fv.Elem()
 		g.encodeField(fv, field, true)
-	} else if fv.Kind() == reflect.Struct {
-		var ifaceType = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
-		if fv.Implements(ifaceType) {
-			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()", g.getTag(field), field.Name))
-		}
+		return
 	}
+	if isPtr {
+		fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))
+		fmt.Fprintln(g.out, fmt.Sprintf("\t\tm[\"%v\"] = v.%v", g.getTag(field), field.Name))
+		fmt.Fprintln(g.out, fmt.Sprintf("\t}"))
+	} else {
+		fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v", g.getTag(field), field.Name))
+	}
+
+	//if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
+	//	g.imports["fmt"] = "fmt"
+	//	if isPtr {
+	//		fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))
+	//		fmt.Fprintln(g.out, fmt.Sprintf("\t\tm[\"%v\"] = *v.%v", g.getTag(field), field.Name))
+	//		fmt.Fprintln(g.out, fmt.Sprintf("\t}"))
+	//	} else {
+	//		fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v", g.getTag(field), field.Name))
+	//	}
+	//
+	//} else if fv.Kind() == reflect.Ptr {
+	//	fv = fv.Elem()
+	//	g.encodeField(fv, field, true)
+	//} else if fv.Kind() == reflect.Struct {
+	//	var ifaceType = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
+	//	if fv.Implements(ifaceType) {
+	//		if isPtr {
+	//			fmt.Fprintln(g.out, fmt.Sprintf("if v.%v!=nil{", field.Name))
+	//			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()}", g.getTag(field), field.Name))
+	//		} else {
+	//			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()", g.getTag(field), field.Name))
+	//		}
+	//	}
+	//}
 }
 func (g *generator) encodeFieldString(fv reflect.Type, field reflect.StructField, isPtr bool) {
 	if strings.HasPrefix(field.Name, "XXX_") {
 		return
 	}
 	if (fv.Kind() < reflect.Complex64 && fv.Kind() > reflect.Invalid) || fv.Kind() == reflect.String {
+		g.imports["fmt"] = "fmt"
 		if isPtr {
 			fmt.Fprintln(g.out, fmt.Sprintf("\tif v.%v != nil {", field.Name))
 			fmt.Fprintln(g.out, fmt.Sprintf("\t\tm[\"%v\"] = fmt.Sprint(*v.%v)", g.getTag(field), field.Name))
@@ -119,7 +139,13 @@ func (g *generator) encodeFieldString(fv reflect.Type, field reflect.StructField
 	} else if fv.Kind() == reflect.Struct {
 		var ifaceType = reflect.TypeOf((*fmt.Stringer)(nil)).Elem()
 		if fv.Implements(ifaceType) {
-			fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()", g.getTag(field), field.Name))
+			if isPtr {
+				fmt.Fprintln(g.out, fmt.Sprintf("if v.%v!=nil{", field.Name))
+				fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()}", g.getTag(field), field.Name))
+			} else {
+				fmt.Fprintln(g.out, fmt.Sprintf("\tm[\"%v\"] = v.%v.String()", g.getTag(field), field.Name))
+
+			}
 		}
 	}
 }

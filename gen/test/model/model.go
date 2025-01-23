@@ -62,9 +62,9 @@ type Resp360 struct {
 	FieldInt          int     `json:"fieldInt"`
 	FieldIntPtr       *int    `json:"FieldIntPtr"`
 	FieldIntArr       []int   `json:"fieldIntArr"`
-	FieldIntArrPtr    []*int  `json:"FieldIntArrPtr"`
-	FieldIntPtrArr    *[]int  `json:"FieldIntPtrArr"`
-	FieldIntPtrArrPtr *[]*int `json:"FieldIntPtrArrPtr"`
+	FieldIntArrPtr    []*int  `json:"fieldIntArrPtr"`
+	FieldIntPtrArr    *[]int  `json:"fieldIntPtrArr"`
+	FieldIntPtrArrPtr *[]*int `json:"fieldIntPtrArrPtr"`
 
 	FieldUint8          uint8     `json:"fieldUint8"`
 	FieldUint8Ptr       *uint8    `json:"fieldUint8Ptr"`

@@ -61,6 +61,9 @@ func (v *CaMsgServiceClient) UnMarshalMapInterface(m map[string]interface{}) err
 
 func (v *CaMsgServiceClient) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
+	if v.cc != nil {
+		m["cc"] = v.cc
+	}
 	return m, nil
 }
 
@@ -193,6 +196,13 @@ func (v *OutModel) UnMarshalMapInterface(m map[string]interface{}) error {
 
 func (v *OutModel) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
+	m["unEasyMap"] = v.UnEasyMap
+	if v.PtrMap != nil {
+		m["ptrMap"] = v.PtrMap
+	}
+	if v.un != nil {
+		m["un"] = v.un
+	}
 	return m, nil
 }
 
@@ -1486,45 +1496,15 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["bind"]; ok {
 		switch acval := val.(type) {
-		case []int:
-			v.Bind = acval
-		case []int8:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
 		case []float64:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.Bind = tmpArr
-		case []int16:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []int32:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
+		case []int:
+			v.Bind = acval
 		case []int64:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []uint:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.Bind = tmpArr
-		case []uint8:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -1581,7 +1561,25 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.Bind = tmpArr
-		case []uint16:
+		case []float32:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []int8:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []int16:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []int32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -1597,7 +1595,19 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int(tmp)
 			}
 			v.Bind = tmpArr
-		case []float32:
+		case []uint16:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []uint:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.Bind = tmpArr
+		case []uint8:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -2580,7 +2590,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["float_arr"]; ok {
 		switch acval := val.(type) {
-		case []uint64:
+		case []int:
 			if len(acval) == 0 {
 				break
 			}
@@ -2589,7 +2599,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
-		case []float32:
+		case []uint64:
 			if len(acval) == 0 {
 				break
 			}
@@ -2607,7 +2617,21 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
-		case []int64:
+		case []uint32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
+		case []float64:
+			if len(acval) == 0 {
+				break
+			}
+			v.FloatArr = acval
+		case []int32:
 			if len(acval) == 0 {
 				break
 			}
@@ -2625,39 +2649,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
-		case []uint16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []float64:
-			if len(acval) == 0 {
-				break
-			}
-			v.FloatArr = acval
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
 		case []uint8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float64, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float64(k)
-			}
-			v.FloatArr = tmpArr
-		case []int32:
 			if len(acval) == 0 {
 				break
 			}
@@ -2708,6 +2700,15 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FloatArr = tmpArr
+		case []float32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
 		case []int8:
 			if len(acval) == 0 {
 				break
@@ -2717,7 +2718,16 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float64(k)
 			}
 			v.FloatArr = tmpArr
-		case []uint32:
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float64, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float64(k)
+			}
+			v.FloatArr = tmpArr
+		case []uint16:
 			if len(acval) == 0 {
 				break
 			}
@@ -2743,6 +2753,101 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["string_arr"]; ok {
 		switch acval := val.(type) {
+		case []string:
+			if len(acval) == 0 {
+				break
+			}
+			v.StringArr = acval
+		case []int32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []uint8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []uint16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []uint32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []float64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
+			}
+			v.StringArr = tmpArr
+		case []int:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []int8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []int16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.StringArr = tmpArr
+		case []uint:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.StringArr = tmpArr
 		case []uint64:
 			if len(acval) == 0 {
 				break
@@ -2790,118 +2895,11 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.StringArr = tmpArr
-		case []float64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
-			}
-			v.StringArr = tmpArr
-		case []int64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []uint32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []int16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []int32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []uint:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []uint8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []uint16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []string:
-			if len(acval) == 0 {
-				break
-			}
-			v.StringArr = acval
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
-		case []int8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.StringArr = tmpArr
 		}
 	}
 	if val, ok = m["int_arr"]; ok {
 		switch acval := val.(type) {
-		case []int:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []int8:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []float32:
+		case []int16:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -2909,7 +2907,13 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.IntArr = tmpArr
 		case []int32:
 			v.IntArr = acval
-		case []uint16:
+		case []uint32:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []uint64:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -2925,13 +2929,43 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int32(tmp)
 			}
 			v.IntArr = tmpArr
+		case []float64:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []int:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []int8:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []int64:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
 		case []uint:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
 			}
 			v.IntArr = tmpArr
-		case []uint64:
+		case []uint8:
+			tmpArr := make([]int32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int32(k)
+			}
+			v.IntArr = tmpArr
+		case []uint16:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -2976,31 +3010,7 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.IntArr = tmpArr
-		case []int16:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []int64:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []uint8:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []uint32:
-			tmpArr := make([]int32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int32(k)
-			}
-			v.IntArr = tmpArr
-		case []float64:
+		case []float32:
 			tmpArr := make([]int32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int32(k)
@@ -3010,6 +3020,52 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["uint_arr"]; ok {
 		switch acval := val.(type) {
+		case []uint16:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []uint64:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []int:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []int32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []int64:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []uint32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.UIntArr = tmpArr
+		case []string:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseUint(k, 10, 64)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = uint8(tmp)
+			}
+			v.UIntArr = tmpArr
 		case []interface{}:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
@@ -3049,30 +3105,6 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.UIntArr = tmpArr
-		case []float32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []int8:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []uint8:
-			v.UIntArr = acval
-		case []string:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseUint(k, 10, 64)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = uint8(tmp)
-			}
-			v.UIntArr = tmpArr
 		case []float64:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
@@ -3085,43 +3117,21 @@ func (v *UserCache) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []int64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []uint64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []int:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
+		case []uint8:
+			v.UIntArr = acval
 		case []uint:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []uint16:
+		case []float32:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
 			}
 			v.UIntArr = tmpArr
-		case []int32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.UIntArr = tmpArr
-		case []uint32:
+		case []int8:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
@@ -3251,14 +3261,18 @@ func (v *UserCache) MarshalMap() (map[string]interface{}, error) {
 	m["card_back"] = v.CardBack
 	m["avatar_frame"] = v.AvatarFrame
 	m["app_package_name"] = v.AppPackageName
+	m["bind"] = v.Bind
 	m["type"] = v.Type
 	m["invite_user_id"] = v.InviteUserID
 	m["invite_code"] = v.InviteCode
+	if v.Invite != nil {
+		m["invite"] = v.Invite
+	}
 	m["is_register"] = v.IsRegister
 	m["enable"] = v.Enable
 	m["recharge_amount"] = v.RechargeAmount
 	m["withdraw_amount"] = v.WithdrawAmount
-	m["available_coins"] = v.AvailableCoins.String()
+	m["available_coins"] = v.AvailableCoins
 	m["s_player"] = v.SPlayer
 	m["c_player"] = v.CPlayer
 	m["withdraw_model"] = v.WithdrawModel
@@ -3272,6 +3286,14 @@ func (v *UserCache) MarshalMap() (map[string]interface{}, error) {
 	m["status"] = v.Status
 	m["last_login_channel"] = v.LastLoginChannel
 	m["app_channel"] = v.AppChannel
+	m["pay_account"] = v.PayAccount
+	m["pay_account_arr"] = v.PayAccountArr
+	m["pay_account_ptr_arr"] = v.PayAccountPtrArr
+	m["float_arr"] = v.FloatArr
+	m["string_arr"] = v.StringArr
+	m["int_arr"] = v.IntArr
+	m["uint_arr"] = v.UIntArr
+	m["connection"] = v.Connection
 	m["player_id"] = v.PlayerID
 	m["token"] = v.Token
 	return m, nil
@@ -3799,20 +3821,22 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldIntArr"]; ok {
 		switch acval := val.(type) {
-		case []uint64:
+		case []uint:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntArr = tmpArr
-		case []string:
+		case []uint8:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
-				tmp, err := strconv.ParseInt(k, 10, 64)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = int(tmp)
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntArr = tmpArr
+		case []uint32:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
 			}
 			v.FieldIntArr = tmpArr
 		case []interface{}:
@@ -3856,34 +3880,20 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.FieldIntArr = tmpArr
 		case []int:
 			v.FieldIntArr = acval
-		case []uint8:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntArr = tmpArr
-		case []uint:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntArr = tmpArr
 		case []uint16:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntArr = tmpArr
-		case []uint32:
+		case []string:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntArr = tmpArr
-		case []float32:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
+				tmp, err := strconv.ParseInt(k, 10, 64)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = int(tmp)
 			}
 			v.FieldIntArr = tmpArr
 		case []int16:
@@ -3892,13 +3902,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntArr = tmpArr
-		case []int64:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntArr = tmpArr
-		case []float64:
+		case []float32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -3916,18 +3920,50 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntArr = tmpArr
+		case []int64:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntArr = tmpArr
+		case []uint64:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntArr = tmpArr
+		case []float64:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntArr = tmpArr
 		}
 	}
-	if val, ok = m["FieldIntArrPtr"]; ok {
+	if val, ok = m["fieldIntArrPtr"]; ok {
 		switch acval := val.(type) {
-		case []uint:
+		case []int:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
 				tmpArr[i] = &tmp
 			}
 			v.FieldIntArrPtr = tmpArr
-		case []uint32:
+		case []int8:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []int16:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []int64:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
@@ -3943,6 +3979,55 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				tmpA := int(tmp)
 				tmpArr[i] = &tmpA
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []uint:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []uint32:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []float32:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []int32:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []uint8:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []uint16:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntArrPtr = tmpArr
+		case []uint64:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
 			}
 			v.FieldIntArrPtr = tmpArr
 		case []interface{}:
@@ -3997,70 +4082,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldIntArrPtr = tmpArr
-		case []float32:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
 		case []float64:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []int16:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []int32:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []uint8:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []uint64:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []int64:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []uint16:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []int:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntArrPtr = tmpArr
-		case []int8:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
@@ -4069,21 +4091,63 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.FieldIntArrPtr = tmpArr
 		}
 	}
-	if val, ok = m["FieldIntPtrArr"]; ok {
+	if val, ok = m["fieldIntPtrArr"]; ok {
 		switch acval := val.(type) {
+		case []int64:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntPtrArr = &tmpArr
 		case []uint:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntPtrArr = &tmpArr
-		case []uint8:
+		case []string:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseInt(k, 10, 64)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = int(tmp)
+			}
+			v.FieldIntPtrArr = &tmpArr
+		case []float32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntPtrArr = &tmpArr
-		case []float64:
+		case []int:
+			v.FieldIntPtrArr = &acval
+		case []int8:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntPtrArr = &tmpArr
+		case []int16:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntPtrArr = &tmpArr
+		case []int32:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntPtrArr = &tmpArr
+		case []uint16:
+			tmpArr := make([]int, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = int(k)
+			}
+			v.FieldIntPtrArr = &tmpArr
+		case []uint32:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -4128,13 +4192,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldIntPtrArr = &tmpArr
-		case []float32:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntPtrArr = &tmpArr
-		case []int16:
+		case []uint8:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -4146,43 +4204,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = int(k)
 			}
 			v.FieldIntPtrArr = &tmpArr
-		case []string:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseInt(k, 10, 64)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = int(tmp)
-			}
-			v.FieldIntPtrArr = &tmpArr
-		case []int64:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntPtrArr = &tmpArr
-		case []uint16:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntPtrArr = &tmpArr
-		case []uint32:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntPtrArr = &tmpArr
-		case []int:
-			v.FieldIntPtrArr = &acval
-		case []int8:
-			tmpArr := make([]int, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = int(k)
-			}
-			v.FieldIntPtrArr = &tmpArr
-		case []int32:
+		case []float64:
 			tmpArr := make([]int, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = int(k)
@@ -4190,37 +4212,9 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.FieldIntPtrArr = &tmpArr
 		}
 	}
-	if val, ok = m["FieldIntPtrArrPtr"]; ok {
+	if val, ok = m["fieldIntPtrArrPtr"]; ok {
 		switch acval := val.(type) {
-		case []int64:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntPtrArrPtr = &tmpArr
-		case []float32:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntPtrArrPtr = &tmpArr
 		case []int:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntPtrArrPtr = &tmpArr
-		case []int32:
-			tmpArr := make([]*int, len(acval))
-			for i, k := range acval {
-				tmp := int(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldIntPtrArrPtr = &tmpArr
-		case []uint64:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
@@ -4234,14 +4228,14 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldIntPtrArrPtr = &tmpArr
-		case []uint16:
+		case []uint8:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
 				tmpArr[i] = &tmp
 			}
 			v.FieldIntPtrArrPtr = &tmpArr
-		case []uint32:
+		case []uint64:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
@@ -4257,6 +4251,27 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				tmpA := int(tmp)
 				tmpArr[i] = &tmpA
+			}
+			v.FieldIntPtrArrPtr = &tmpArr
+		case []float32:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntPtrArrPtr = &tmpArr
+		case []int16:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntPtrArrPtr = &tmpArr
+		case []int64:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
 			}
 			v.FieldIntPtrArrPtr = &tmpArr
 		case []interface{}:
@@ -4325,14 +4340,21 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldIntPtrArrPtr = &tmpArr
-		case []int16:
+		case []int32:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
 				tmpArr[i] = &tmp
 			}
 			v.FieldIntPtrArrPtr = &tmpArr
-		case []uint8:
+		case []uint16:
+			tmpArr := make([]*int, len(acval))
+			for i, k := range acval {
+				tmp := int(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldIntPtrArrPtr = &tmpArr
+		case []uint32:
 			tmpArr := make([]*int, len(acval))
 			for i, k := range acval {
 				tmp := int(k)
@@ -4431,28 +4453,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldUint8Arr"]; ok {
 		switch acval := val.(type) {
-		case []uint:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []string:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseUint(k, 10, 64)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = uint8(tmp)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []int8:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
 		case []int64:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
@@ -4461,43 +4461,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			v.FieldUint8Arr = tmpArr
 		case []uint8:
 			v.FieldUint8Arr = acval
-		case []uint16:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
 		case []uint64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []float32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []float64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []int:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []int32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8Arr = tmpArr
-		case []int16:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
@@ -4548,11 +4512,83 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldUint8Arr = tmpArr
+		case []float64:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []int:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []int8:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []int16:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []uint16:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []uint:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []string:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseUint(k, 10, 64)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = uint8(tmp)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []int32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
+		case []float32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8Arr = tmpArr
 		}
 	}
 	if val, ok = m["fieldUint8ArrPtr"]; ok {
 		switch acval := val.(type) {
-		case []uint32:
+		case []int16:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8ArrPtr = tmpArr
+		case []uint8:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8ArrPtr = tmpArr
+		case []uint16:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -4570,6 +4606,13 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmpA
 			}
 			v.FieldUint8ArrPtr = tmpArr
+		case []float64:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8ArrPtr = tmpArr
 		case []int:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
@@ -4577,21 +4620,14 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldUint8ArrPtr = tmpArr
-		case []int32:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8ArrPtr = tmpArr
-		case []int64:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8ArrPtr = tmpArr
 		case []uint:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8ArrPtr = tmpArr
+		case []uint32:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -4650,27 +4686,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldUint8ArrPtr = tmpArr
-		case []float32:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8ArrPtr = tmpArr
-		case []float64:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8ArrPtr = tmpArr
-		case []uint64:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8ArrPtr = tmpArr
 		case []int8:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
@@ -4678,21 +4693,28 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldUint8ArrPtr = tmpArr
-		case []int16:
+		case []float32:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
 				tmpArr[i] = &tmp
 			}
 			v.FieldUint8ArrPtr = tmpArr
-		case []uint8:
+		case []int32:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
 				tmpArr[i] = &tmp
 			}
 			v.FieldUint8ArrPtr = tmpArr
-		case []uint16:
+		case []int64:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8ArrPtr = tmpArr
+		case []uint64:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -4703,21 +4725,13 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldUint8PtrArr"]; ok {
 		switch acval := val.(type) {
-		case []uint16:
+		case []int8:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
 			}
 			v.FieldUint8PtrArr = &tmpArr
-		case []uint32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8PtrArr = &tmpArr
-		case []uint8:
-			v.FieldUint8PtrArr = &acval
-		case []int64:
+		case []uint:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
@@ -4727,16 +4741,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8PtrArr = &tmpArr
-		case []string:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseUint(k, 10, 64)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = uint8(tmp)
 			}
 			v.FieldUint8PtrArr = &tmpArr
 		case []int:
@@ -4751,28 +4755,14 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = uint8(k)
 			}
 			v.FieldUint8PtrArr = &tmpArr
-		case []uint:
+		case []string:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8PtrArr = &tmpArr
-		case []float32:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8PtrArr = &tmpArr
-		case []float64:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
-			}
-			v.FieldUint8PtrArr = &tmpArr
-		case []int8:
-			tmpArr := make([]uint8, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = uint8(k)
+				tmp, err := strconv.ParseUint(k, 10, 64)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = uint8(tmp)
 			}
 			v.FieldUint8PtrArr = &tmpArr
 		case []interface{}:
@@ -4814,7 +4804,39 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldUint8PtrArr = &tmpArr
+		case []float32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8PtrArr = &tmpArr
 		case []int16:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8PtrArr = &tmpArr
+		case []uint32:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8PtrArr = &tmpArr
+		case []float64:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8PtrArr = &tmpArr
+		case []int64:
+			tmpArr := make([]uint8, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = uint8(k)
+			}
+			v.FieldUint8PtrArr = &tmpArr
+		case []uint8:
+			v.FieldUint8PtrArr = &acval
+		case []uint16:
 			tmpArr := make([]uint8, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = uint8(k)
@@ -4824,49 +4846,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldUint8PtrArrPtr"]; ok {
 		switch acval := val.(type) {
-		case []int8:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
 		case []uint:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
-		case []uint8:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
-		case []int16:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
-		case []int32:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
-		case []uint32:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
-		case []uint64:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -4925,7 +4905,21 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldUint8PtrArrPtr = &tmpArr
-		case []float32:
+		case []int:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
+		case []uint8:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
+		case []uint32:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -4943,14 +4937,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmpA
 			}
 			v.FieldUint8PtrArrPtr = &tmpArr
-		case []float64:
-			tmpArr := make([]*uint8, len(acval))
-			for i, k := range acval {
-				tmp := uint8(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldUint8PtrArrPtr = &tmpArr
-		case []int:
+		case []float32:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -4964,7 +4951,42 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldUint8PtrArrPtr = &tmpArr
+		case []int16:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
+		case []uint64:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
+		case []float64:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
+		case []int8:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
 		case []uint16:
+			tmpArr := make([]*uint8, len(acval))
+			for i, k := range acval {
+				tmp := uint8(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldUint8PtrArrPtr = &tmpArr
+		case []int32:
 			tmpArr := make([]*uint8, len(acval))
 			for i, k := range acval {
 				tmp := uint8(k)
@@ -5051,56 +5073,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldFloat32Arr"]; ok {
 		switch acval := val.(type) {
-		case []float32:
-			if len(acval) == 0 {
-				break
-			}
-			v.FieldFloat32Arr = acval
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32Arr = tmpArr
-		case []uint8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32Arr = tmpArr
-		case []uint32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32Arr = tmpArr
-		case []int16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32Arr = tmpArr
-		case []int32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32Arr = tmpArr
 		case []uint:
 			if len(acval) == 0 {
 				break
@@ -5110,13 +5082,17 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32Arr = tmpArr
-		case []uint16:
+		case []string:
 			if len(acval) == 0 {
 				break
 			}
 			tmpArr := make([]float32, len(acval))
 			for i, k := range acval {
-				tmpArr[i] = float32(k)
+				tmp, err := strconv.ParseFloat(k, 10)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = float32(tmp)
 			}
 			v.FieldFloat32Arr = tmpArr
 		case []interface{}:
@@ -5161,7 +5137,34 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldFloat32Arr = tmpArr
+		case []uint16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32Arr = tmpArr
 		case []float64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32Arr = tmpArr
+		case []int8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32Arr = tmpArr
+		case []uint8:
 			if len(acval) == 0 {
 				break
 			}
@@ -5188,20 +5191,39 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32Arr = tmpArr
-		case []string:
+		case []int:
 			if len(acval) == 0 {
 				break
 			}
 			tmpArr := make([]float32, len(acval))
 			for i, k := range acval {
-				tmp, err := strconv.ParseFloat(k, 10)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = float32(tmp)
+				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32Arr = tmpArr
-		case []int8:
+		case []int16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32Arr = tmpArr
+		case []int32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32Arr = tmpArr
+		case []float32:
+			if len(acval) == 0 {
+				break
+			}
+			v.FieldFloat32Arr = acval
+		case []uint32:
 			if len(acval) == 0 {
 				break
 			}
@@ -5214,47 +5236,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldFloat32ArrPtr"]; ok {
 		switch acval := val.(type) {
-		case []int8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32ArrPtr = tmpArr
-		case []int32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32ArrPtr = tmpArr
-		case []uint32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32ArrPtr = tmpArr
-		case []uint64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32ArrPtr = tmpArr
-		case []float32:
+		case []float64:
 			if len(acval) == 0 {
 				break
 			}
@@ -5274,7 +5256,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32ArrPtr = tmpArr
-		case []int64:
+		case []uint16:
 			if len(acval) == 0 {
 				break
 			}
@@ -5284,7 +5266,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32ArrPtr = tmpArr
-		case []uint:
+		case []uint32:
 			if len(acval) == 0 {
 				break
 			}
@@ -5294,7 +5276,17 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32ArrPtr = tmpArr
-		case []float64:
+		case []float32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32ArrPtr = tmpArr
+		case []uint64:
 			if len(acval) == 0 {
 				break
 			}
@@ -5314,7 +5306,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32ArrPtr = tmpArr
-		case []uint8:
+		case []int8:
 			if len(acval) == 0 {
 				break
 			}
@@ -5324,7 +5316,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32ArrPtr = tmpArr
-		case []uint16:
+		case []uint:
 			if len(acval) == 0 {
 				break
 			}
@@ -5346,6 +5338,36 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 				tmpA := float32(tmp)
 				tmpArr[i] = &tmpA
+			}
+			v.FieldFloat32ArrPtr = tmpArr
+		case []int32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32ArrPtr = tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32ArrPtr = tmpArr
+		case []uint8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32ArrPtr = tmpArr
 		case []interface{}:
@@ -5407,7 +5429,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldFloat32PtrArr"]; ok {
 		switch acval := val.(type) {
-		case []uint16:
+		case []float64:
 			if len(acval) == 0 {
 				break
 			}
@@ -5416,13 +5438,44 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32PtrArr = &tmpArr
-		case []uint32:
+		case []int:
 			if len(acval) == 0 {
 				break
 			}
 			tmpArr := make([]float32, len(acval))
 			for i, k := range acval {
 				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32PtrArr = &tmpArr
+		case []int8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32PtrArr = &tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32PtrArr = &tmpArr
+		case []string:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseFloat(k, 10)
+				if err != nil {
+					return err
+				}
+				tmpArr[i] = float32(tmp)
 			}
 			v.FieldFloat32PtrArr = &tmpArr
 		case []interface{}:
@@ -5467,11 +5520,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldFloat32PtrArr = &tmpArr
-		case []float32:
-			if len(acval) == 0 {
-				break
-			}
-			v.FieldFloat32PtrArr = &acval
 		case []int16:
 			if len(acval) == 0 {
 				break
@@ -5490,6 +5538,15 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32PtrArr = &tmpArr
+		case []uint16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]float32, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = float32(k)
+			}
+			v.FieldFloat32PtrArr = &tmpArr
 		case []uint64:
 			if len(acval) == 0 {
 				break
@@ -5499,34 +5556,12 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32PtrArr = &tmpArr
-		case []float64:
+		case []float32:
 			if len(acval) == 0 {
 				break
 			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32PtrArr = &tmpArr
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32PtrArr = &tmpArr
-		case []int8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = float32(k)
-			}
-			v.FieldFloat32PtrArr = &tmpArr
-		case []int64:
+			v.FieldFloat32PtrArr = &acval
+		case []uint:
 			if len(acval) == 0 {
 				break
 			}
@@ -5544,7 +5579,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32PtrArr = &tmpArr
-		case []uint:
+		case []uint32:
 			if len(acval) == 0 {
 				break
 			}
@@ -5553,23 +5588,30 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = float32(k)
 			}
 			v.FieldFloat32PtrArr = &tmpArr
-		case []string:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]float32, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseFloat(k, 10)
-				if err != nil {
-					return err
-				}
-				tmpArr[i] = float32(tmp)
-			}
-			v.FieldFloat32PtrArr = &tmpArr
 		}
 	}
 	if val, ok = m["fieldFloat32PtrArrPtr"]; ok {
 		switch acval := val.(type) {
+		case []uint8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []uint64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
 		case []float64:
 			if len(acval) == 0 {
 				break
@@ -5580,27 +5622,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
 		case []int16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []uint:
 			if len(acval) == 0 {
 				break
 			}
@@ -5621,80 +5643,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 			v.FieldFloat32PtrArrPtr = &tmpArr
 		case []uint32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []uint64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []float32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []int8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []int32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []string:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp, err := strconv.ParseFloat(k, 10)
-				if err != nil {
-					return err
-				}
-				tmpA := float32(tmp)
-				tmpArr[i] = &tmpA
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []int64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*float32, len(acval))
-			for i, k := range acval {
-				tmp := float32(k)
-				tmpArr[i] = &tmp
-			}
-			v.FieldFloat32PtrArrPtr = &tmpArr
-		case []uint8:
 			if len(acval) == 0 {
 				break
 			}
@@ -5757,6 +5705,80 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				default:
 					break
 				}
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []int8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []int32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []float32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []int:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []uint:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp := float32(k)
+				tmpArr[i] = &tmp
+			}
+			v.FieldFloat32PtrArrPtr = &tmpArr
+		case []string:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*float32, len(acval))
+			for i, k := range acval {
+				tmp, err := strconv.ParseFloat(k, 10)
+				if err != nil {
+					return err
+				}
+				tmpA := float32(tmp)
+				tmpArr[i] = &tmpA
 			}
 			v.FieldFloat32PtrArrPtr = &tmpArr
 		}
@@ -5849,7 +5871,63 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldStringArr"]; ok {
 		switch acval := val.(type) {
-		case []int64:
+		case []uint32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.FieldStringArr = tmpArr
+		case []interface{}:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				switch trueK := k.(type) {
+				case float32:
+					tmpArr[i] = strconv.FormatFloat(float64(trueK), 'f', -1, 64)
+				case float64:
+					tmpArr[i] = strconv.FormatFloat(float64(trueK), 'f', -1, 64)
+				case int:
+					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
+				case int8:
+					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
+				case int16:
+					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
+				case int32:
+					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
+				case int64:
+					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
+				case uint:
+					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
+				case uint8:
+					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
+				case uint16:
+					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
+				case uint32:
+					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
+				case uint64:
+					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
+				case string:
+					tmpArr[i] = trueK
+				default:
+					break
+				}
+			}
+			v.FieldStringArr = tmpArr
+		case []float64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
+			}
+			v.FieldStringArr = tmpArr
+		case []int32:
 			if len(acval) == 0 {
 				break
 			}
@@ -5867,7 +5945,34 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
 			}
 			v.FieldStringArr = tmpArr
-		case []uint32:
+		case []uint16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.FieldStringArr = tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.FieldStringArr = tmpArr
+		case []uint8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.FieldStringArr = tmpArr
+		case []uint64:
 			if len(acval) == 0 {
 				break
 			}
@@ -5881,15 +5986,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				break
 			}
 			v.FieldStringArr = acval
-		case []float64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
-			}
-			v.FieldStringArr = tmpArr
 		case []int:
 			if len(acval) == 0 {
 				break
@@ -5908,62 +6004,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
 			}
 			v.FieldStringArr = tmpArr
-		case []int32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.FieldStringArr = tmpArr
-		case []uint64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.FieldStringArr = tmpArr
-		case []interface{}:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				switch trueK := k.(type) {
-				case float32:
-					tmpArr[i] = strconv.FormatFloat(float64(trueK), 'f', -1, 64)
-				case float64:
-					tmpArr[i] = strconv.FormatFloat(float64(trueK), 'f', -1, 64)
-				case int:
-					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
-				case int8:
-					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
-				case int16:
-					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
-				case int32:
-					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
-				case int64:
-					tmpArr[i] = strconv.FormatInt(int64(trueK), 10)
-				case uint:
-					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
-				case uint8:
-					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
-				case uint16:
-					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
-				case uint32:
-					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
-				case uint64:
-					tmpArr[i] = strconv.FormatUint(uint64(trueK), 10)
-				case string:
-					tmpArr[i] = trueK
-				default:
-					break
-				}
-			}
-			v.FieldStringArr = tmpArr
 		case []int16:
 			if len(acval) == 0 {
 				break
@@ -5973,35 +6013,17 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
 			}
 			v.FieldStringArr = tmpArr
-		case []uint8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.FieldStringArr = tmpArr
-		case []uint16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.FieldStringArr = tmpArr
 		}
 	}
 	if val, ok = m["fieldStringArrPtr"]; ok {
 		switch acval := val.(type) {
-		case []int64:
+		case []uint:
 			if len(acval) == 0 {
 				break
 			}
 			tmpArr := make([]*string, len(acval))
 			for i, k := range acval {
-				tmp := strconv.FormatInt(int64(k), 10)
+				tmp := strconv.FormatUint(uint64(k), 10)
 				tmpArr[i] = &tmp
 			}
 			v.FieldStringArrPtr = tmpArr
@@ -6012,66 +6034,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			tmpArr := make([]*string, len(acval))
 			for i, k := range acval {
 				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []uint32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []uint64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []string:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := k
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []float64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatFloat(float64(k), 'f', -1, 64)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatInt(int64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []int32:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatInt(int64(k), 10)
 				tmpArr[i] = &tmp
 			}
 			v.FieldStringArrPtr = tmpArr
@@ -6125,6 +6087,86 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldStringArrPtr = tmpArr
+		case []string:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := k
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []float64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatFloat(float64(k), 'f', -1, 64)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatInt(int64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []int32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatInt(int64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []uint8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatUint(uint64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []uint32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatUint(uint64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []uint64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatUint(uint64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
+		case []int:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatInt(int64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringArrPtr = tmpArr
 		case []int8:
 			if len(acval) == 0 {
 				break
@@ -6142,26 +6184,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			tmpArr := make([]*string, len(acval))
 			for i, k := range acval {
 				tmp := strconv.FormatInt(int64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []uint:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringArrPtr = tmpArr
-		case []uint8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
 				tmpArr[i] = &tmp
 			}
 			v.FieldStringArrPtr = tmpArr
@@ -6169,7 +6191,12 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 	}
 	if val, ok = m["fieldStringPtrArr"]; ok {
 		switch acval := val.(type) {
-		case []int8:
+		case []string:
+			if len(acval) == 0 {
+				break
+			}
+			v.FieldStringPtrArr = &acval
+		case []int16:
 			if len(acval) == 0 {
 				break
 			}
@@ -6187,57 +6214,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
 			}
 			v.FieldStringPtrArr = &tmpArr
-		case []int64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatInt(int64(k), 10)
-			}
-			v.FieldStringPtrArr = &tmpArr
 		case []uint:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.FieldStringPtrArr = &tmpArr
-		case []uint16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.FieldStringPtrArr = &tmpArr
-		case []uint64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
-			}
-			v.FieldStringPtrArr = &tmpArr
-		case []string:
-			if len(acval) == 0 {
-				break
-			}
-			v.FieldStringPtrArr = &acval
-		case []float64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]string, len(acval))
-			for i, k := range acval {
-				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
-			}
-			v.FieldStringPtrArr = &tmpArr
-		case []uint8:
 			if len(acval) == 0 {
 				break
 			}
@@ -6293,6 +6270,15 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldStringPtrArr = &tmpArr
+		case []float64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatFloat(float64(k), 'f', -1, 64)
+			}
+			v.FieldStringPtrArr = &tmpArr
 		case []int:
 			if len(acval) == 0 {
 				break
@@ -6302,7 +6288,7 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
 			}
 			v.FieldStringPtrArr = &tmpArr
-		case []int16:
+		case []int8:
 			if len(acval) == 0 {
 				break
 			}
@@ -6311,10 +6297,96 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = strconv.FormatInt(int64(k), 10)
 			}
 			v.FieldStringPtrArr = &tmpArr
+		case []int64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatInt(int64(k), 10)
+			}
+			v.FieldStringPtrArr = &tmpArr
+		case []uint8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.FieldStringPtrArr = &tmpArr
+		case []uint16:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.FieldStringPtrArr = &tmpArr
+		case []uint64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]string, len(acval))
+			for i, k := range acval {
+				tmpArr[i] = strconv.FormatUint(uint64(k), 10)
+			}
+			v.FieldStringPtrArr = &tmpArr
 		}
 	}
 	if val, ok = m["fieldStringPtrArrPtr"]; ok {
 		switch acval := val.(type) {
+		case []uint32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatUint(uint64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
+		case []uint64:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatUint(uint64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
+		case []string:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := k
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
+		case []int:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatInt(int64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
+		case []int8:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatInt(int64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
 		case []uint8:
 			if len(acval) == 0 {
 				break
@@ -6325,7 +6397,17 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				tmpArr[i] = &tmp
 			}
 			v.FieldStringPtrArrPtr = &tmpArr
-		case []uint32:
+		case []uint:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatUint(uint64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
+		case []uint16:
 			if len(acval) == 0 {
 				break
 			}
@@ -6385,66 +6467,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 				}
 			}
 			v.FieldStringPtrArrPtr = &tmpArr
-		case []string:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := k
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
-		case []int8:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatInt(int64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
-		case []int64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatInt(int64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
-		case []uint:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
-		case []uint16:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
-		case []uint64:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatUint(uint64(k), 10)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
 		case []float64:
 			if len(acval) == 0 {
 				break
@@ -6452,16 +6474,6 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			tmpArr := make([]*string, len(acval))
 			for i, k := range acval {
 				tmp := strconv.FormatFloat(float64(k), 'f', -1, 64)
-				tmpArr[i] = &tmp
-			}
-			v.FieldStringPtrArrPtr = &tmpArr
-		case []int:
-			if len(acval) == 0 {
-				break
-			}
-			tmpArr := make([]*string, len(acval))
-			for i, k := range acval {
-				tmp := strconv.FormatInt(int64(k), 10)
 				tmpArr[i] = &tmp
 			}
 			v.FieldStringPtrArrPtr = &tmpArr
@@ -6476,6 +6488,16 @@ func (v *Resp360) UnMarshalMapInterface(m map[string]interface{}) error {
 			}
 			v.FieldStringPtrArrPtr = &tmpArr
 		case []int32:
+			if len(acval) == 0 {
+				break
+			}
+			tmpArr := make([]*string, len(acval))
+			for i, k := range acval {
+				tmp := strconv.FormatInt(int64(k), 10)
+				tmpArr[i] = &tmp
+			}
+			v.FieldStringPtrArrPtr = &tmpArr
+		case []int64:
 			if len(acval) == 0 {
 				break
 			}
@@ -7931,26 +7953,100 @@ func (v *Resp360) MarshalMap() (map[string]interface{}, error) {
 	m := make(map[string]interface{})
 	m["fieldInt"] = v.FieldInt
 	if v.FieldIntPtr != nil {
-		m["FieldIntPtr"] = *v.FieldIntPtr
+		m["FieldIntPtr"] = v.FieldIntPtr
+	}
+	m["fieldIntArr"] = v.FieldIntArr
+	m["fieldIntArrPtr"] = v.FieldIntArrPtr
+	if v.FieldIntPtrArr != nil {
+		m["fieldIntPtrArr"] = v.FieldIntPtrArr
+	}
+	if v.FieldIntPtrArrPtr != nil {
+		m["fieldIntPtrArrPtr"] = v.FieldIntPtrArrPtr
 	}
 	m["fieldUint8"] = v.FieldUint8
 	if v.FieldUint8Ptr != nil {
-		m["fieldUint8Ptr"] = *v.FieldUint8Ptr
+		m["fieldUint8Ptr"] = v.FieldUint8Ptr
+	}
+	m["fieldUint8Arr"] = v.FieldUint8Arr
+	m["fieldUint8ArrPtr"] = v.FieldUint8ArrPtr
+	if v.FieldUint8PtrArr != nil {
+		m["fieldUint8PtrArr"] = v.FieldUint8PtrArr
+	}
+	if v.FieldUint8PtrArrPtr != nil {
+		m["fieldUint8PtrArrPtr"] = v.FieldUint8PtrArrPtr
 	}
 	m["fieldFloat32"] = v.FieldFloat32
 	if v.FieldFloat32Ptr != nil {
-		m["fieldFloat32Ptr"] = *v.FieldFloat32Ptr
+		m["fieldFloat32Ptr"] = v.FieldFloat32Ptr
+	}
+	m["fieldFloat32Arr"] = v.FieldFloat32Arr
+	m["fieldFloat32ArrPtr"] = v.FieldFloat32ArrPtr
+	if v.FieldFloat32PtrArr != nil {
+		m["fieldFloat32PtrArr"] = v.FieldFloat32PtrArr
+	}
+	if v.FieldFloat32PtrArrPtr != nil {
+		m["fieldFloat32PtrArrPtr"] = v.FieldFloat32PtrArrPtr
 	}
 	m["fieldBool"] = v.FieldBool
 	if v.FieldBoolPtr != nil {
-		m["fieldBoolPtr"] = *v.FieldBoolPtr
+		m["fieldBoolPtr"] = v.FieldBoolPtr
+	}
+	m["fieldBoolArr"] = v.FieldBoolArr
+	m["fieldBoolArrPtr"] = v.FieldBoolArrPtr
+	if v.FieldBoolPtrArr != nil {
+		m["fieldBoolPtrArr"] = v.FieldBoolPtrArr
+	}
+	if v.FieldBoolPtrArrPtr != nil {
+		m["fieldBoolPtrArrPtr"] = v.FieldBoolPtrArrPtr
 	}
 	m["fieldString"] = v.FieldString
 	if v.FieldStringPtr != nil {
-		m["fieldStringPtr"] = *v.FieldStringPtr
+		m["fieldStringPtr"] = v.FieldStringPtr
 	}
-	m["decimal"] = v.Decimal.String()
-	m["decimalPtr"] = v.DecimalPtr.String()
+	m["fieldStringArr"] = v.FieldStringArr
+	m["fieldStringArrPtr"] = v.FieldStringArrPtr
+	if v.FieldStringPtrArr != nil {
+		m["fieldStringPtrArr"] = v.FieldStringPtrArr
+	}
+	if v.FieldStringPtrArrPtr != nil {
+		m["fieldStringPtrArrPtr"] = v.FieldStringPtrArrPtr
+	}
+	m["decimal"] = v.Decimal
+	if v.DecimalPtr != nil {
+		m["decimalPtr"] = v.DecimalPtr
+	}
+	m["decimalArr"] = v.DecimalArr
+	if v.DecimalPtrArr != nil {
+		m["DecimalPtrArr"] = v.DecimalPtrArr
+	}
+	m["decimalArrPtr"] = v.DecimalArrPtr
+	if v.DecimalPtrArrPtr != nil {
+		m["DecimalPtrArrPtr"] = v.DecimalPtrArrPtr
+	}
+	m["structModel"] = v.StructModel
+	if v.StructModelPtr != nil {
+		m["structModelPtr"] = v.StructModelPtr
+	}
+	m["structModelArr"] = v.StructModelArr
+	m["structModelArrPtr"] = v.StructModelArrPtr
+	if v.StructModelPtrArrPtr != nil {
+		m["structModelPtrArrPtr"] = v.StructModelPtrArrPtr
+	}
+	m["outModel"] = v.OutModel
+	if v.OutModelPtr != nil {
+		m["outModelPtr"] = v.OutModelPtr
+	}
+	m["outModelArr"] = v.OutModelArr
+	m["outModelArrPtr"] = v.OutModelArrPtr
+	if v.OutModelPtrArrPtr != nil {
+		m["OutModelPtrArrPtr"] = v.OutModelPtrArrPtr
+	}
+	m["inter"] = v.Inter
+	m["InterArr"] = v.InterArr
+	if v.InterPtrArr != nil {
+		m["InterPtrArr"] = v.InterPtrArr
+	}
+	m["data"] = v.Data
 	return m, nil
 }
 
@@ -7977,7 +8073,9 @@ func (v *Resp360) MarshalMapString() (map[string]string, error) {
 		m["fieldStringPtr"] = fmt.Sprint(*v.FieldStringPtr)
 	}
 	m["decimal"] = v.Decimal.String()
-	m["decimalPtr"] = v.DecimalPtr.String()
+	if v.DecimalPtr != nil {
+		m["decimalPtr"] = v.DecimalPtr.String()
+	}
 	return m, nil
 }
 
@@ -7991,14 +8089,14 @@ func (v *Resp360) CheckField(m map[string]string) error {
 	if _, ok := m["fieldIntArr"]; !ok {
 		return fmt.Errorf("field fieldIntArr is miss")
 	}
-	if _, ok := m["FieldIntArrPtr"]; !ok {
-		return fmt.Errorf("field FieldIntArrPtr is miss")
+	if _, ok := m["fieldIntArrPtr"]; !ok {
+		return fmt.Errorf("field fieldIntArrPtr is miss")
 	}
-	if _, ok := m["FieldIntPtrArr"]; !ok {
-		return fmt.Errorf("field FieldIntPtrArr is miss")
+	if _, ok := m["fieldIntPtrArr"]; !ok {
+		return fmt.Errorf("field fieldIntPtrArr is miss")
 	}
-	if _, ok := m["FieldIntPtrArrPtr"]; !ok {
-		return fmt.Errorf("field FieldIntPtrArrPtr is miss")
+	if _, ok := m["fieldIntPtrArrPtr"]; !ok {
+		return fmt.Errorf("field fieldIntPtrArrPtr is miss")
 	}
 	if _, ok := m["fieldUint8"]; !ok {
 		return fmt.Errorf("field fieldUint8 is miss")
@@ -8145,9 +8243,9 @@ const (
 	Resp360_FieldInt              Resp360Field = "fieldInt"
 	Resp360_FieldIntPtr           Resp360Field = "FieldIntPtr"
 	Resp360_FieldIntArr           Resp360Field = "fieldIntArr"
-	Resp360_FieldIntArrPtr        Resp360Field = "FieldIntArrPtr"
-	Resp360_FieldIntPtrArr        Resp360Field = "FieldIntPtrArr"
-	Resp360_FieldIntPtrArrPtr     Resp360Field = "FieldIntPtrArrPtr"
+	Resp360_FieldIntArrPtr        Resp360Field = "fieldIntArrPtr"
+	Resp360_FieldIntPtrArr        Resp360Field = "fieldIntPtrArr"
+	Resp360_FieldIntPtrArrPtr     Resp360Field = "fieldIntPtrArrPtr"
 	Resp360_FieldUint8            Resp360Field = "fieldUint8"
 	Resp360_FieldUint8Ptr         Resp360Field = "fieldUint8Ptr"
 	Resp360_FieldUint8Arr         Resp360Field = "fieldUint8Arr"
